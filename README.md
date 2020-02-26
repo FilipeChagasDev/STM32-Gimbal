@@ -1,9 +1,7 @@
 # Open Source Gimbal with Servomotor
 
 ![Version](https://img.shields.io/badge/Version-v0.0.0-blue)
-![Compiler](https://img.shields.io/badge/Compiler-gcc-green)
 ![License](https://img.shields.io/badge/License-MIT-blue)
-![Language](https://img.shields.io/badge/Language-C-yellow)
 
 ## Hardware
 
