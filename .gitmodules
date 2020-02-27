@@ -1,0 +1,3 @@
+[submodule "firmware/stm32-servomotor"]
+	path = firmware/stm32-servomotor
+	url = https://github.com/FilipeChagasDev/stm32-servomotor
