@@ -1,0 +1,696 @@
+ARM GAS  /tmp/cclzz7qp.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"servomotor.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.servo_init,"ax",%progbits
+  16              		.align	1
+  17              		.global	servo_init
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	servo_init:
+  24              	.LFB65:
+  25              		.file 1 "stm32-servomotor/servomotor.c"
+   1:stm32-servomotor/servomotor.c **** #include "servomotor.h"
+   2:stm32-servomotor/servomotor.c **** 
+   3:stm32-servomotor/servomotor.c **** servo_status_t servo_init(servo_t *handler, TIM_HandleTypeDef *htim, uint32_t channel)
+   4:stm32-servomotor/servomotor.c **** {
+  26              		.loc 1 4 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+  31 0000 10B5     		push	{r4, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  36 0002 0346     		mov	r3, r0
+  37 0004 0846     		mov	r0, r1
+  38              	.LVL1:
+   5:stm32-servomotor/servomotor.c ****     handler->htim = htim;
+  39              		.loc 1 5 0
+  40 0006 1960     		str	r1, [r3]
+   6:stm32-servomotor/servomotor.c ****     handler->channel = channel;
+  41              		.loc 1 6 0
+  42 0008 5A60     		str	r2, [r3, #4]
+   7:stm32-servomotor/servomotor.c ****     handler->offset = 0;
+  43              		.loc 1 7 0
+  44 000a 0021     		movs	r1, #0
+  45              	.LVL2:
+  46 000c 9960     		str	r1, [r3, #8]	@ float
+   8:stm32-servomotor/servomotor.c **** 
+   9:stm32-servomotor/servomotor.c ****     switch (channel)
+  47              		.loc 1 9 0
+  48 000e 0C2A     		cmp	r2, #12
+  49 0010 1DD8     		bhi	.L2
+ARM GAS  /tmp/cclzz7qp.s 			page 2
+
+
+  50 0012 DFE802F0 		tbb	[pc, r2]
+  51              	.L4:
+  52 0016 07       		.byte	(.L3-.L4)/2
+  53 0017 1C       		.byte	(.L2-.L4)/2
+  54 0018 1C       		.byte	(.L2-.L4)/2
+  55 0019 1C       		.byte	(.L2-.L4)/2
+  56 001a 10       		.byte	(.L5-.L4)/2
+  57 001b 1C       		.byte	(.L2-.L4)/2
+  58 001c 1C       		.byte	(.L2-.L4)/2
+  59 001d 1C       		.byte	(.L2-.L4)/2
+  60 001e 14       		.byte	(.L6-.L4)/2
+  61 001f 1C       		.byte	(.L2-.L4)/2
+  62 0020 1C       		.byte	(.L2-.L4)/2
+  63 0021 1C       		.byte	(.L2-.L4)/2
+  64 0022 18       		.byte	(.L7-.L4)/2
+  65 0023 00       		.p2align 1
+  66              	.L3:
+  10:stm32-servomotor/servomotor.c ****     {
+  11:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_1:
+  12:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR1 = 0;
+  67              		.loc 1 12 0
+  68 0024 0368     		ldr	r3, [r0]
+  69              	.LVL3:
+  70 0026 0021     		movs	r1, #0
+  71 0028 5963     		str	r1, [r3, #52]
+  72              	.L8:
+  13:stm32-servomotor/servomotor.c ****         break;
+  14:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_2:
+  15:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR2 = 0;
+  16:stm32-servomotor/servomotor.c ****         break;
+  17:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_3:
+  18:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR3 = 0;
+  19:stm32-servomotor/servomotor.c ****         break;
+  20:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_4:
+  21:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR4 = 0;
+  22:stm32-servomotor/servomotor.c ****         break;
+  23:stm32-servomotor/servomotor.c ****     default:
+  24:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR1 = 0;
+  25:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR2 = 0;
+  26:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR3 = 0;
+  27:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR4 = 0;
+  28:stm32-servomotor/servomotor.c ****     }
+  29:stm32-servomotor/servomotor.c **** 
+  30:stm32-servomotor/servomotor.c ****     if(HAL_TIM_PWM_Start(htim, channel) == HAL_OK) return SERVO_STATUS_OK;
+  73              		.loc 1 30 0
+  74 002a 1146     		mov	r1, r2
+  75 002c FFF7FEFF 		bl	HAL_TIM_PWM_Start
+  76              	.LVL4:
+  77 0030 00B1     		cbz	r0, .L9
+  31:stm32-servomotor/servomotor.c ****     else return SERVO_STATUS_ERROR;
+  78              		.loc 1 31 0
+  79 0032 0120     		movs	r0, #1
+  80              	.L9:
+  32:stm32-servomotor/servomotor.c **** }
+  81              		.loc 1 32 0
+  82 0034 10BD     		pop	{r4, pc}
+  83              	.LVL5:
+ARM GAS  /tmp/cclzz7qp.s 			page 3
+
+
+  84              	.L5:
+  15:stm32-servomotor/servomotor.c ****         break;
+  85              		.loc 1 15 0
+  86 0036 0368     		ldr	r3, [r0]
+  87              	.LVL6:
+  88 0038 0021     		movs	r1, #0
+  89 003a 9963     		str	r1, [r3, #56]
+  16:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_3:
+  90              		.loc 1 16 0
+  91 003c F5E7     		b	.L8
+  92              	.LVL7:
+  93              	.L6:
+  18:stm32-servomotor/servomotor.c ****         break;
+  94              		.loc 1 18 0
+  95 003e 0368     		ldr	r3, [r0]
+  96              	.LVL8:
+  97 0040 0021     		movs	r1, #0
+  98 0042 D963     		str	r1, [r3, #60]
+  19:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_4:
+  99              		.loc 1 19 0
+ 100 0044 F1E7     		b	.L8
+ 101              	.LVL9:
+ 102              	.L7:
+  21:stm32-servomotor/servomotor.c ****         break;
+ 103              		.loc 1 21 0
+ 104 0046 0368     		ldr	r3, [r0]
+ 105              	.LVL10:
+ 106 0048 0021     		movs	r1, #0
+ 107 004a 1964     		str	r1, [r3, #64]
+  22:stm32-servomotor/servomotor.c ****     default:
+ 108              		.loc 1 22 0
+ 109 004c EDE7     		b	.L8
+ 110              	.LVL11:
+ 111              	.L2:
+  24:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR2 = 0;
+ 112              		.loc 1 24 0
+ 113 004e 0468     		ldr	r4, [r0]
+ 114 0050 0021     		movs	r1, #0
+ 115 0052 6163     		str	r1, [r4, #52]
+  25:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR3 = 0;
+ 116              		.loc 1 25 0
+ 117 0054 1C68     		ldr	r4, [r3]
+ 118 0056 2468     		ldr	r4, [r4]
+ 119 0058 A163     		str	r1, [r4, #56]
+  26:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR4 = 0;
+ 120              		.loc 1 26 0
+ 121 005a 1C68     		ldr	r4, [r3]
+ 122 005c 2468     		ldr	r4, [r4]
+ 123 005e E163     		str	r1, [r4, #60]
+  27:stm32-servomotor/servomotor.c ****     }
+ 124              		.loc 1 27 0
+ 125 0060 1B68     		ldr	r3, [r3]
+ 126              	.LVL12:
+ 127 0062 1B68     		ldr	r3, [r3]
+ 128 0064 1964     		str	r1, [r3, #64]
+ 129 0066 E0E7     		b	.L8
+ 130              		.cfi_endproc
+ARM GAS  /tmp/cclzz7qp.s 			page 4
+
+
+ 131              	.LFE65:
+ 133              		.section	.text.servo_set_offset,"ax",%progbits
+ 134              		.align	1
+ 135              		.global	servo_set_offset
+ 136              		.syntax unified
+ 137              		.thumb
+ 138              		.thumb_func
+ 139              		.fpu softvfp
+ 141              	servo_set_offset:
+ 142              	.LFB66:
+  33:stm32-servomotor/servomotor.c **** 
+  34:stm32-servomotor/servomotor.c **** 
+  35:stm32-servomotor/servomotor.c **** void servo_set_offset(servo_t *handler, float angle_deg)
+  36:stm32-servomotor/servomotor.c **** {
+ 143              		.loc 1 36 0
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 0
+ 146              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147              		@ link register save eliminated.
+ 148              	.LVL13:
+  37:stm32-servomotor/servomotor.c ****     handler->offset = angle_deg;
+ 149              		.loc 1 37 0
+ 150 0000 8160     		str	r1, [r0, #8]	@ float
+ 151 0002 7047     		bx	lr
+ 152              		.cfi_endproc
+ 153              	.LFE66:
+ 155              		.global	__aeabi_f2d
+ 156              		.global	__aeabi_ddiv
+ 157              		.global	__aeabi_dadd
+ 158              		.global	__aeabi_d2f
+ 159              		.section	.text.servo_duty_ms,"ax",%progbits
+ 160              		.align	1
+ 161              		.global	servo_duty_ms
+ 162              		.syntax unified
+ 163              		.thumb
+ 164              		.thumb_func
+ 165              		.fpu softvfp
+ 167              	servo_duty_ms:
+ 168              	.LFB67:
+  38:stm32-servomotor/servomotor.c **** }
+  39:stm32-servomotor/servomotor.c **** 
+  40:stm32-servomotor/servomotor.c **** float servo_duty_ms(float angle_deg)
+  41:stm32-servomotor/servomotor.c **** {
+ 169              		.loc 1 41 0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 0
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173              	.LVL14:
+ 174 0000 08B5     		push	{r3, lr}
+ 175              	.LCFI1:
+ 176              		.cfi_def_cfa_offset 8
+ 177              		.cfi_offset 3, -8
+ 178              		.cfi_offset 14, -4
+  42:stm32-servomotor/servomotor.c ****     /*  
+  43:stm32-servomotor/servomotor.c ****        180            2ms
+  44:stm32-servomotor/servomotor.c ****     --------   =   ----------
+  45:stm32-servomotor/servomotor.c ****     angle_deg       duty_ms
+ARM GAS  /tmp/cclzz7qp.s 			page 5
+
+
+  46:stm32-servomotor/servomotor.c **** 
+  47:stm32-servomotor/servomotor.c ****                 angle_deg
+  48:stm32-servomotor/servomotor.c ****     duty_ms =   --------- 
+  49:stm32-servomotor/servomotor.c ****                    90
+  50:stm32-servomotor/servomotor.c **** 
+  51:stm32-servomotor/servomotor.c ****     0.5ms -> 0deg
+  52:stm32-servomotor/servomotor.c ****     2.5ms -> 180deg
+  53:stm32-servomotor/servomotor.c ****     */
+  54:stm32-servomotor/servomotor.c **** 
+  55:stm32-servomotor/servomotor.c ****     return 0.5 + angle_deg / 90.0;
+ 179              		.loc 1 55 0
+ 180 0002 FFF7FEFF 		bl	__aeabi_f2d
+ 181              	.LVL15:
+ 182 0006 0022     		movs	r2, #0
+ 183 0008 044B     		ldr	r3, .L15
+ 184 000a FFF7FEFF 		bl	__aeabi_ddiv
+ 185              	.LVL16:
+ 186 000e 0022     		movs	r2, #0
+ 187 0010 034B     		ldr	r3, .L15+4
+ 188 0012 FFF7FEFF 		bl	__aeabi_dadd
+ 189              	.LVL17:
+ 190 0016 FFF7FEFF 		bl	__aeabi_d2f
+ 191              	.LVL18:
+  56:stm32-servomotor/servomotor.c **** }
+ 192              		.loc 1 56 0
+ 193 001a 08BD     		pop	{r3, pc}
+ 194              	.L16:
+ 195              		.align	2
+ 196              	.L15:
+ 197 001c 00805640 		.word	1079410688
+ 198 0020 0000E03F 		.word	1071644672
+ 199              		.cfi_endproc
+ 200              	.LFE67:
+ 202              		.global	__aeabi_fadd
+ 203              		.global	__aeabi_ui2f
+ 204              		.global	__aeabi_fmul
+ 205              		.global	__aeabi_fdiv
+ 206              		.global	__aeabi_f2iz
+ 207              		.global	__aeabi_f2uiz
+ 208              		.section	.text.servo_set_position,"ax",%progbits
+ 209              		.align	1
+ 210              		.global	servo_set_position
+ 211              		.syntax unified
+ 212              		.thumb
+ 213              		.thumb_func
+ 214              		.fpu softvfp
+ 216              	servo_set_position:
+ 217              	.LFB68:
+  57:stm32-servomotor/servomotor.c **** 
+  58:stm32-servomotor/servomotor.c **** void servo_set_position(servo_t *handler, float angle_deg)
+  59:stm32-servomotor/servomotor.c **** {
+ 218              		.loc 1 59 0
+ 219              		.cfi_startproc
+ 220              		@ args = 0, pretend = 0, frame = 0
+ 221              		@ frame_needed = 0, uses_anonymous_args = 0
+ 222              	.LVL19:
+ 223 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ARM GAS  /tmp/cclzz7qp.s 			page 6
+
+
+ 224              	.LCFI2:
+ 225              		.cfi_def_cfa_offset 24
+ 226              		.cfi_offset 3, -24
+ 227              		.cfi_offset 4, -20
+ 228              		.cfi_offset 5, -16
+ 229              		.cfi_offset 6, -12
+ 230              		.cfi_offset 7, -8
+ 231              		.cfi_offset 14, -4
+ 232 0002 0446     		mov	r4, r0
+  60:stm32-servomotor/servomotor.c ****     /*
+  61:stm32-servomotor/servomotor.c ****     duty_ms      duty_16
+  62:stm32-servomotor/servomotor.c ****     ------- =  ----------- 
+  63:stm32-servomotor/servomotor.c ****       20ms     max_duty_16
+  64:stm32-servomotor/servomotor.c **** 
+  65:stm32-servomotor/servomotor.c ****                              duty_ms
+  66:stm32-servomotor/servomotor.c ****     duty_16 = max_duty_16 * ----------
+  67:stm32-servomotor/servomotor.c ****                               20ms 
+  68:stm32-servomotor/servomotor.c ****     */
+  69:stm32-servomotor/servomotor.c **** 
+  70:stm32-servomotor/servomotor.c ****     angle_deg += handler->offset;
+ 233              		.loc 1 70 0
+ 234 0004 8068     		ldr	r0, [r0, #8]	@ float
+ 235              	.LVL20:
+ 236 0006 FFF7FEFF 		bl	__aeabi_fadd
+ 237              	.LVL21:
+ 238 000a 0746     		mov	r7, r0
+ 239              	.LVL22:
+  71:stm32-servomotor/servomotor.c **** 
+  72:stm32-servomotor/servomotor.c ****     float max_duty_16 = handler->htim->Instance->ARR;
+ 240              		.loc 1 72 0
+ 241 000c 2368     		ldr	r3, [r4]
+ 242 000e 1D68     		ldr	r5, [r3]
+ 243 0010 E86A     		ldr	r0, [r5, #44]
+ 244              	.LVL23:
+ 245 0012 FFF7FEFF 		bl	__aeabi_ui2f
+ 246              	.LVL24:
+ 247 0016 0646     		mov	r6, r0
+ 248              	.LVL25:
+  73:stm32-servomotor/servomotor.c ****     float duty_ms = servo_duty_ms(angle_deg);
+ 249              		.loc 1 73 0
+ 250 0018 3846     		mov	r0, r7
+ 251              	.LVL26:
+ 252 001a FFF7FEFF 		bl	servo_duty_ms
+ 253              	.LVL27:
+  74:stm32-servomotor/servomotor.c ****     float duty_16 = (duty_ms * max_duty_16)/ 20.0;
+ 254              		.loc 1 74 0
+ 255 001e 0146     		mov	r1, r0
+ 256 0020 3046     		mov	r0, r6
+ 257              	.LVL28:
+ 258 0022 FFF7FEFF 		bl	__aeabi_fmul
+ 259              	.LVL29:
+ 260 0026 1949     		ldr	r1, .L29
+ 261 0028 FFF7FEFF 		bl	__aeabi_fdiv
+ 262              	.LVL30:
+ 263 002c 0646     		mov	r6, r0
+ 264              	.LVL31:
+  75:stm32-servomotor/servomotor.c **** 
+ARM GAS  /tmp/cclzz7qp.s 			page 7
+
+
+  76:stm32-servomotor/servomotor.c ****     uint16_t ccr = ( (int32_t)duty_16 > 0xFFFF ? 
+ 265              		.loc 1 76 0
+ 266 002e FFF7FEFF 		bl	__aeabi_f2iz
+ 267              	.LVL32:
+ 268 0032 B0F5803F 		cmp	r0, #65536
+ 269 0036 06DA     		bge	.L26
+ 270              		.loc 1 76 0 is_stmt 0 discriminator 1
+ 271 0038 0028     		cmp	r0, #0
+ 272 003a 12DB     		blt	.L27
+ 273              		.loc 1 76 0 discriminator 3
+ 274 003c 3046     		mov	r0, r6
+ 275 003e FFF7FEFF 		bl	__aeabi_f2uiz
+ 276              	.LVL33:
+ 277 0042 80B2     		uxth	r0, r0
+ 278 0044 01E0     		b	.L18
+ 279              	.L26:
+ 280              		.loc 1 76 0
+ 281 0046 4FF6FF70 		movw	r0, #65535
+ 282              	.L18:
+ 283              	.LVL34:
+  77:stm32-servomotor/servomotor.c ****                     0xFFFF
+  78:stm32-servomotor/servomotor.c ****                     :  ( (int32_t)duty_16 < 0 ?
+  79:stm32-servomotor/servomotor.c ****                         0 
+  80:stm32-servomotor/servomotor.c ****                         :  (uint16_t)duty_16
+  81:stm32-servomotor/servomotor.c ****                        ) 
+  82:stm32-servomotor/servomotor.c ****                    );
+  83:stm32-servomotor/servomotor.c **** 
+  84:stm32-servomotor/servomotor.c ****     switch (handler->channel)
+ 284              		.loc 1 84 0 is_stmt 1 discriminator 8
+ 285 004a 6368     		ldr	r3, [r4, #4]
+ 286 004c 0C2B     		cmp	r3, #12
+ 287 004e 12D8     		bhi	.L19
+ 288 0050 DFE803F0 		tbb	[pc, r3]
+ 289              	.L21:
+ 290 0054 09       		.byte	(.L20-.L21)/2
+ 291 0055 11       		.byte	(.L19-.L21)/2
+ 292 0056 11       		.byte	(.L19-.L21)/2
+ 293 0057 11       		.byte	(.L19-.L21)/2
+ 294 0058 0B       		.byte	(.L22-.L21)/2
+ 295 0059 11       		.byte	(.L19-.L21)/2
+ 296 005a 11       		.byte	(.L19-.L21)/2
+ 297 005b 11       		.byte	(.L19-.L21)/2
+ 298 005c 0D       		.byte	(.L23-.L21)/2
+ 299 005d 11       		.byte	(.L19-.L21)/2
+ 300 005e 11       		.byte	(.L19-.L21)/2
+ 301 005f 11       		.byte	(.L19-.L21)/2
+ 302 0060 0F       		.byte	(.L24-.L21)/2
+ 303              	.LVL35:
+ 304 0061 00       		.p2align 1
+ 305              	.L27:
+  76:stm32-servomotor/servomotor.c ****                     0xFFFF
+ 306              		.loc 1 76 0
+ 307 0062 0020     		movs	r0, #0
+ 308 0064 F1E7     		b	.L18
+ 309              	.LVL36:
+ 310              	.L20:
+  85:stm32-servomotor/servomotor.c ****     {
+ARM GAS  /tmp/cclzz7qp.s 			page 8
+
+
+  86:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_1:
+  87:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR1 = ccr;
+ 311              		.loc 1 87 0
+ 312 0066 6863     		str	r0, [r5, #52]
+  88:stm32-servomotor/servomotor.c ****         break;
+ 313              		.loc 1 88 0
+ 314 0068 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 315              	.LVL37:
+ 316              	.L22:
+  89:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_2:
+  90:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR2 = ccr;
+ 317              		.loc 1 90 0
+ 318 006a A863     		str	r0, [r5, #56]
+  91:stm32-servomotor/servomotor.c ****         break;
+ 319              		.loc 1 91 0
+ 320 006c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 321              	.LVL38:
+ 322              	.L23:
+  92:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_3:
+  93:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR3 = ccr;
+ 323              		.loc 1 93 0
+ 324 006e E863     		str	r0, [r5, #60]
+  94:stm32-servomotor/servomotor.c ****         break;
+ 325              		.loc 1 94 0
+ 326 0070 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 327              	.LVL39:
+ 328              	.L24:
+  95:stm32-servomotor/servomotor.c ****     case TIM_CHANNEL_4:
+  96:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR4 = ccr;
+ 329              		.loc 1 96 0
+ 330 0072 2864     		str	r0, [r5, #64]
+  97:stm32-servomotor/servomotor.c ****         break;
+ 331              		.loc 1 97 0
+ 332 0074 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 333              	.LVL40:
+ 334              	.L19:
+  98:stm32-servomotor/servomotor.c ****     default:
+  99:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR1 = ccr;
+ 335              		.loc 1 99 0
+ 336 0076 6863     		str	r0, [r5, #52]
+ 100:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR2 = ccr;
+ 337              		.loc 1 100 0
+ 338 0078 2368     		ldr	r3, [r4]
+ 339 007a 1B68     		ldr	r3, [r3]
+ 340 007c 9863     		str	r0, [r3, #56]
+ 101:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR3 = ccr;
+ 341              		.loc 1 101 0
+ 342 007e 2368     		ldr	r3, [r4]
+ 343 0080 1B68     		ldr	r3, [r3]
+ 344 0082 D863     		str	r0, [r3, #60]
+ 102:stm32-servomotor/servomotor.c ****         handler->htim->Instance->CCR4 = ccr;
+ 345              		.loc 1 102 0
+ 346 0084 2368     		ldr	r3, [r4]
+ 347 0086 1B68     		ldr	r3, [r3]
+ 348 0088 1864     		str	r0, [r3, #64]
+ 349 008a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 350              	.LVL41:
+ARM GAS  /tmp/cclzz7qp.s 			page 9
+
+
+ 351              	.L30:
+ 352              		.align	2
+ 353              	.L29:
+ 354 008c 0000A041 		.word	1101004800
+ 355              		.cfi_endproc
+ 356              	.LFE68:
+ 358              		.global	__aeabi_fcmplt
+ 359              		.global	__aeabi_fsub
+ 360              		.global	__aeabi_fcmpgt
+ 361              		.section	.text.servo_sweep,"ax",%progbits
+ 362              		.align	1
+ 363              		.global	servo_sweep
+ 364              		.syntax unified
+ 365              		.thumb
+ 366              		.thumb_func
+ 367              		.fpu softvfp
+ 369              	servo_sweep:
+ 370              	.LFB69:
+ 103:stm32-servomotor/servomotor.c ****     }
+ 104:stm32-servomotor/servomotor.c **** }
+ 105:stm32-servomotor/servomotor.c **** 
+ 106:stm32-servomotor/servomotor.c **** void servo_sweep(servo_t *handler, float start_angle_deg, float end_angle_deg, float step, uint32_t
+ 107:stm32-servomotor/servomotor.c **** {
+ 371              		.loc 1 107 0
+ 372              		.cfi_startproc
+ 373              		@ args = 4, pretend = 0, frame = 0
+ 374              		@ frame_needed = 0, uses_anonymous_args = 0
+ 375              	.LVL42:
+ 376 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 377              	.LCFI3:
+ 378              		.cfi_def_cfa_offset 32
+ 379              		.cfi_offset 3, -32
+ 380              		.cfi_offset 4, -28
+ 381              		.cfi_offset 5, -24
+ 382              		.cfi_offset 6, -20
+ 383              		.cfi_offset 7, -16
+ 384              		.cfi_offset 8, -12
+ 385              		.cfi_offset 9, -8
+ 386              		.cfi_offset 14, -4
+ 387 0004 0746     		mov	r7, r0
+ 388 0006 0D46     		mov	r5, r1
+ 389 0008 1646     		mov	r6, r2
+ 390 000a 9846     		mov	r8, r3
+ 391 000c DDF82090 		ldr	r9, [sp, #32]
+ 392              	.LVL43:
+ 108:stm32-servomotor/servomotor.c ****     float i = start_angle_deg;
+ 393              		.loc 1 108 0
+ 394 0010 0C46     		mov	r4, r1
+ 109:stm32-servomotor/servomotor.c **** 
+ 110:stm32-servomotor/servomotor.c ****     while (i < end_angle_deg)
+ 395              		.loc 1 110 0
+ 396 0012 02E0     		b	.L32
+ 397              	.LVL44:
+ 398              	.L33:
+ 111:stm32-servomotor/servomotor.c ****     {
+ 112:stm32-servomotor/servomotor.c ****         servo_set_position(handler, i);
+ 113:stm32-servomotor/servomotor.c ****         i += step;
+ARM GAS  /tmp/cclzz7qp.s 			page 10
+
+
+ 114:stm32-servomotor/servomotor.c ****         i = (i > end_angle_deg ? end_angle_deg : i);
+ 115:stm32-servomotor/servomotor.c ****         HAL_Delay(step_delay_ms);
+ 399              		.loc 1 115 0 discriminator 4
+ 400 0014 4846     		mov	r0, r9
+ 401 0016 FFF7FEFF 		bl	HAL_Delay
+ 402              	.LVL45:
+ 403              	.L32:
+ 110:stm32-servomotor/servomotor.c ****     {
+ 404              		.loc 1 110 0
+ 405 001a 3146     		mov	r1, r6
+ 406 001c 2046     		mov	r0, r4
+ 407 001e FFF7FEFF 		bl	__aeabi_fcmplt
+ 408              	.LVL46:
+ 409 0022 98B1     		cbz	r0, .L36
+ 112:stm32-servomotor/servomotor.c ****         i += step;
+ 410              		.loc 1 112 0
+ 411 0024 2146     		mov	r1, r4
+ 412 0026 3846     		mov	r0, r7
+ 413 0028 FFF7FEFF 		bl	servo_set_position
+ 414              	.LVL47:
+ 113:stm32-servomotor/servomotor.c ****         i = (i > end_angle_deg ? end_angle_deg : i);
+ 415              		.loc 1 113 0
+ 416 002c 4146     		mov	r1, r8
+ 417 002e 2046     		mov	r0, r4
+ 418 0030 FFF7FEFF 		bl	__aeabi_fadd
+ 419              	.LVL48:
+ 420 0034 0446     		mov	r4, r0
+ 421              	.LVL49:
+ 114:stm32-servomotor/servomotor.c ****         HAL_Delay(step_delay_ms);
+ 422              		.loc 1 114 0
+ 423 0036 0146     		mov	r1, r0
+ 424 0038 3046     		mov	r0, r6
+ 425              	.LVL50:
+ 426 003a FFF7FEFF 		bl	__aeabi_fcmplt
+ 427              	.LVL51:
+ 428 003e 0028     		cmp	r0, #0
+ 429 0040 E8D0     		beq	.L33
+ 430 0042 3446     		mov	r4, r6
+ 431              	.LVL52:
+ 432 0044 E6E7     		b	.L33
+ 433              	.L37:
+ 434              	.LVL53:
+ 116:stm32-servomotor/servomotor.c ****     }
+ 117:stm32-servomotor/servomotor.c **** 
+ 118:stm32-servomotor/servomotor.c ****     while (i > start_angle_deg)
+ 119:stm32-servomotor/servomotor.c ****     {
+ 120:stm32-servomotor/servomotor.c ****         servo_set_position(handler, i);
+ 121:stm32-servomotor/servomotor.c ****         i -= step;
+ 122:stm32-servomotor/servomotor.c ****         i = (i < start_angle_deg ? start_angle_deg : i);
+ 123:stm32-servomotor/servomotor.c ****         HAL_Delay(step_delay_ms);
+ 435              		.loc 1 123 0 discriminator 4
+ 436 0046 4846     		mov	r0, r9
+ 437 0048 FFF7FEFF 		bl	HAL_Delay
+ 438              	.LVL54:
+ 439              	.L36:
+ 118:stm32-servomotor/servomotor.c ****     {
+ 440              		.loc 1 118 0
+ARM GAS  /tmp/cclzz7qp.s 			page 11
+
+
+ 441 004c 2946     		mov	r1, r5
+ 442 004e 2046     		mov	r0, r4
+ 443 0050 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 444              	.LVL55:
+ 445 0054 80B1     		cbz	r0, .L43
+ 120:stm32-servomotor/servomotor.c ****         i -= step;
+ 446              		.loc 1 120 0
+ 447 0056 2146     		mov	r1, r4
+ 448 0058 3846     		mov	r0, r7
+ 449 005a FFF7FEFF 		bl	servo_set_position
+ 450              	.LVL56:
+ 121:stm32-servomotor/servomotor.c ****         i = (i < start_angle_deg ? start_angle_deg : i);
+ 451              		.loc 1 121 0
+ 452 005e 4146     		mov	r1, r8
+ 453 0060 2046     		mov	r0, r4
+ 454 0062 FFF7FEFF 		bl	__aeabi_fsub
+ 455              	.LVL57:
+ 456 0066 0446     		mov	r4, r0
+ 457              	.LVL58:
+ 122:stm32-servomotor/servomotor.c ****         HAL_Delay(step_delay_ms);
+ 458              		.loc 1 122 0
+ 459 0068 0146     		mov	r1, r0
+ 460 006a 2846     		mov	r0, r5
+ 461              	.LVL59:
+ 462 006c FFF7FEFF 		bl	__aeabi_fcmpgt
+ 463              	.LVL60:
+ 464 0070 0028     		cmp	r0, #0
+ 465 0072 E8D0     		beq	.L37
+ 466 0074 2C46     		mov	r4, r5
+ 467              	.LVL61:
+ 468 0076 E6E7     		b	.L37
+ 469              	.LVL62:
+ 470              	.L43:
+ 124:stm32-servomotor/servomotor.c ****     }
+ 125:stm32-servomotor/servomotor.c ****     
+ 126:stm32-servomotor/servomotor.c **** }
+ 471              		.loc 1 126 0
+ 472 0078 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 473              		.cfi_endproc
+ 474              	.LFE69:
+ 476              		.text
+ 477              	.Letext0:
+ 478              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 479              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 480              		.file 4 "Drivers/CMSIS/Include/core_cm3.h"
+ 481              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 482              		.file 6 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 483              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 484              		.file 8 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 485              		.file 9 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
+ 486              		.file 10 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 487              		.file 11 "stm32-servomotor/servomotor.h"
+ARM GAS  /tmp/cclzz7qp.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 servomotor.c
+     /tmp/cclzz7qp.s:16     .text.servo_init:0000000000000000 $t
+     /tmp/cclzz7qp.s:23     .text.servo_init:0000000000000000 servo_init
+     /tmp/cclzz7qp.s:52     .text.servo_init:0000000000000016 $d
+     /tmp/cclzz7qp.s:134    .text.servo_set_offset:0000000000000000 $t
+     /tmp/cclzz7qp.s:141    .text.servo_set_offset:0000000000000000 servo_set_offset
+     /tmp/cclzz7qp.s:160    .text.servo_duty_ms:0000000000000000 $t
+     /tmp/cclzz7qp.s:167    .text.servo_duty_ms:0000000000000000 servo_duty_ms
+     /tmp/cclzz7qp.s:197    .text.servo_duty_ms:000000000000001c $d
+     /tmp/cclzz7qp.s:209    .text.servo_set_position:0000000000000000 $t
+     /tmp/cclzz7qp.s:216    .text.servo_set_position:0000000000000000 servo_set_position
+     /tmp/cclzz7qp.s:290    .text.servo_set_position:0000000000000054 $d
+     /tmp/cclzz7qp.s:354    .text.servo_set_position:000000000000008c $d
+     /tmp/cclzz7qp.s:362    .text.servo_sweep:0000000000000000 $t
+     /tmp/cclzz7qp.s:369    .text.servo_sweep:0000000000000000 servo_sweep
+                     .debug_frame:0000000000000010 $d
+     /tmp/cclzz7qp.s:65     .text.servo_init:0000000000000023 $d
+     /tmp/cclzz7qp.s:65     .text.servo_init:0000000000000024 $t
+     /tmp/cclzz7qp.s:304    .text.servo_set_position:0000000000000061 $d
+     /tmp/cclzz7qp.s:304    .text.servo_set_position:0000000000000062 $t
+
+UNDEFINED SYMBOLS
+HAL_TIM_PWM_Start
+__aeabi_f2d
+__aeabi_ddiv
+__aeabi_dadd
+__aeabi_d2f
+__aeabi_fadd
+__aeabi_ui2f
+__aeabi_fmul
+__aeabi_fdiv
+__aeabi_f2iz
+__aeabi_f2uiz
+__aeabi_fcmplt
+__aeabi_fsub
+__aeabi_fcmpgt
+HAL_Delay
