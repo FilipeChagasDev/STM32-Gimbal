@@ -1,3 +1,6 @@
 [submodule "firmware/stm32-servomotor"]
 	path = firmware/stm32-servomotor
 	url = https://github.com/FilipeChagasDev/stm32-servomotor
+[submodule "firmware/stm32-mpu6050"]
+	path = firmware/stm32-mpu6050
+	url = https://github.com/FilipeChagasDev/stm32-mpu6050

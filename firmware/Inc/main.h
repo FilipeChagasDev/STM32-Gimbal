@@ -28,11 +28,13 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx_hal.h"
-
+#include <stm32f1xx_hal.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stm32f1xx_hal_i2c.h>
+#include <stm32f1xx_hal_uart.h>
+#include <stm32f1xx_hal_tim.h>
+#include <stm32f1xx_ll_tim.h>
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

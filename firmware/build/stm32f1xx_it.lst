@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccbXzfDN.s 			page 1
+ARM GAS  /tmp/ccEpXaeu.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -23,7 +23,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   20              		.thumb_func
   21              		.fpu softvfp
   23              	NMI_Handler:
-  24              	.LFB65:
+  24              	.LFB241:
   25              		.file 1 "Src/stm32f1xx_it.c"
    1:Src/stm32f1xx_it.c **** /* USER CODE BEGIN Header */
    2:Src/stm32f1xx_it.c **** /**
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   31:Src/stm32f1xx_it.c **** /* USER CODE END TD */
   32:Src/stm32f1xx_it.c **** 
   33:Src/stm32f1xx_it.c **** /* Private define ------------------------------------------------------------*/
-ARM GAS  /tmp/ccbXzfDN.s 			page 2
+ARM GAS  /tmp/ccEpXaeu.s 			page 2
 
 
   34:Src/stm32f1xx_it.c **** /* USER CODE BEGIN PD */
@@ -107,7 +107,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   30              		@ link register save eliminated.
   31 0000 7047     		bx	lr
   32              		.cfi_endproc
-  33              	.LFE65:
+  33              	.LFE241:
   35              		.section	.text.HardFault_Handler,"ax",%progbits
   36              		.align	1
   37              		.global	HardFault_Handler
@@ -116,9 +116,9 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   40              		.thumb_func
   41              		.fpu softvfp
   43              	HardFault_Handler:
-  44              	.LFB66:
+  44              	.LFB242:
   73:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
-ARM GAS  /tmp/ccbXzfDN.s 			page 3
+ARM GAS  /tmp/ccEpXaeu.s 			page 3
 
 
   74:Src/stm32f1xx_it.c **** 
@@ -142,7 +142,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   51              	.L3:
   52 0000 FEE7     		b	.L3
   53              		.cfi_endproc
-  54              	.LFE66:
+  54              	.LFE242:
   56              		.section	.text.MemManage_Handler,"ax",%progbits
   57              		.align	1
   58              		.global	MemManage_Handler
@@ -151,7 +151,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   61              		.thumb_func
   62              		.fpu softvfp
   64              	MemManage_Handler:
-  65              	.LFB67:
+  65              	.LFB243:
   86:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN HardFault_IRQn 0 */
   87:Src/stm32f1xx_it.c **** 
   88:Src/stm32f1xx_it.c ****   /* USER CODE END HardFault_IRQn 0 */
@@ -176,9 +176,9 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   72              	.L5:
   73 0000 FEE7     		b	.L5
   74              		.cfi_endproc
-  75              	.LFE67:
+  75              	.LFE243:
   77              		.section	.text.BusFault_Handler,"ax",%progbits
-ARM GAS  /tmp/ccbXzfDN.s 			page 4
+ARM GAS  /tmp/ccEpXaeu.s 			page 4
 
 
   78              		.align	1
@@ -188,7 +188,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   82              		.thumb_func
   83              		.fpu softvfp
   85              	BusFault_Handler:
-  86              	.LFB68:
+  86              	.LFB244:
  101:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
  102:Src/stm32f1xx_it.c **** 
  103:Src/stm32f1xx_it.c ****   /* USER CODE END MemoryManagement_IRQn 0 */
@@ -213,7 +213,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
   93              	.L7:
   94 0000 FEE7     		b	.L7
   95              		.cfi_endproc
-  96              	.LFE68:
+  96              	.LFE244:
   98              		.section	.text.UsageFault_Handler,"ax",%progbits
   99              		.align	1
  100              		.global	UsageFault_Handler
@@ -222,7 +222,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  103              		.thumb_func
  104              		.fpu softvfp
  106              	UsageFault_Handler:
- 107              	.LFB69:
+ 107              	.LFB245:
  116:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN BusFault_IRQn 0 */
  117:Src/stm32f1xx_it.c **** 
  118:Src/stm32f1xx_it.c ****   /* USER CODE END BusFault_IRQn 0 */
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  128:Src/stm32f1xx_it.c ****   */
  129:Src/stm32f1xx_it.c **** void UsageFault_Handler(void)
  130:Src/stm32f1xx_it.c **** {
-ARM GAS  /tmp/ccbXzfDN.s 			page 5
+ARM GAS  /tmp/ccEpXaeu.s 			page 5
 
 
  108              		.loc 1 130 0
@@ -250,7 +250,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  114              	.L9:
  115 0000 FEE7     		b	.L9
  116              		.cfi_endproc
- 117              	.LFE69:
+ 117              	.LFE245:
  119              		.section	.text.SVC_Handler,"ax",%progbits
  120              		.align	1
  121              		.global	SVC_Handler
@@ -259,7 +259,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  124              		.thumb_func
  125              		.fpu softvfp
  127              	SVC_Handler:
- 128              	.LFB70:
+ 128              	.LFB246:
  131:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN UsageFault_IRQn 0 */
  132:Src/stm32f1xx_it.c **** 
  133:Src/stm32f1xx_it.c ****   /* USER CODE END UsageFault_IRQn 0 */
@@ -282,7 +282,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  133              		@ link register save eliminated.
  134 0000 7047     		bx	lr
  135              		.cfi_endproc
- 136              	.LFE70:
+ 136              	.LFE246:
  138              		.section	.text.DebugMon_Handler,"ax",%progbits
  139              		.align	1
  140              		.global	DebugMon_Handler
@@ -291,14 +291,14 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  143              		.thumb_func
  144              		.fpu softvfp
  146              	DebugMon_Handler:
- 147              	.LFB71:
+ 147              	.LFB247:
  146:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN SVCall_IRQn 0 */
  147:Src/stm32f1xx_it.c **** 
  148:Src/stm32f1xx_it.c ****   /* USER CODE END SVCall_IRQn 0 */
  149:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN SVCall_IRQn 1 */
  150:Src/stm32f1xx_it.c **** 
  151:Src/stm32f1xx_it.c ****   /* USER CODE END SVCall_IRQn 1 */
-ARM GAS  /tmp/ccbXzfDN.s 			page 6
+ARM GAS  /tmp/ccEpXaeu.s 			page 6
 
 
  152:Src/stm32f1xx_it.c **** }
@@ -315,7 +315,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  152              		@ link register save eliminated.
  153 0000 7047     		bx	lr
  154              		.cfi_endproc
- 155              	.LFE71:
+ 155              	.LFE247:
  157              		.section	.text.PendSV_Handler,"ax",%progbits
  158              		.align	1
  159              		.global	PendSV_Handler
@@ -324,7 +324,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  162              		.thumb_func
  163              		.fpu softvfp
  165              	PendSV_Handler:
- 166              	.LFB72:
+ 166              	.LFB248:
  159:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
  160:Src/stm32f1xx_it.c **** 
  161:Src/stm32f1xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 0 */
@@ -345,7 +345,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  171              		@ link register save eliminated.
  172 0000 7047     		bx	lr
  173              		.cfi_endproc
- 174              	.LFE72:
+ 174              	.LFE248:
  176              		.section	.text.SysTick_Handler,"ax",%progbits
  177              		.align	1
  178              		.global	SysTick_Handler
@@ -354,11 +354,11 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  181              		.thumb_func
  182              		.fpu softvfp
  184              	SysTick_Handler:
- 185              	.LFB73:
+ 185              	.LFB249:
  172:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN PendSV_IRQn 0 */
  173:Src/stm32f1xx_it.c **** 
  174:Src/stm32f1xx_it.c ****   /* USER CODE END PendSV_IRQn 0 */
-ARM GAS  /tmp/ccbXzfDN.s 			page 7
+ARM GAS  /tmp/ccEpXaeu.s 			page 7
 
 
  175:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN PendSV_IRQn 1 */
@@ -390,7 +390,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  198              	.LVL0:
  199 0006 08BD     		pop	{r3, pc}
  200              		.cfi_endproc
- 201              	.LFE73:
+ 201              	.LFE249:
  203              		.section	.text.TIM2_IRQHandler,"ax",%progbits
  204              		.align	1
  205              		.global	TIM2_IRQHandler
@@ -399,7 +399,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  208              		.thumb_func
  209              		.fpu softvfp
  211              	TIM2_IRQHandler:
- 212              	.LFB74:
+ 212              	.LFB250:
  189:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN SysTick_IRQn 1 */
  190:Src/stm32f1xx_it.c **** 
  191:Src/stm32f1xx_it.c ****   /* USER CODE END SysTick_IRQn 1 */
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  204:Src/stm32f1xx_it.c **** void TIM2_IRQHandler(void)
  205:Src/stm32f1xx_it.c **** {
  213              		.loc 1 205 0
-ARM GAS  /tmp/ccbXzfDN.s 			page 8
+ARM GAS  /tmp/ccEpXaeu.s 			page 8
 
 
  214              		.cfi_startproc
@@ -443,7 +443,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  229              	.L17:
  230 000c 00000000 		.word	htim2
  231              		.cfi_endproc
- 232              	.LFE74:
+ 232              	.LFE250:
  234              		.section	.text.TIM3_IRQHandler,"ax",%progbits
  235              		.align	1
  236              		.global	TIM3_IRQHandler
@@ -452,7 +452,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  239              		.thumb_func
  240              		.fpu softvfp
  242              	TIM3_IRQHandler:
- 243              	.LFB75:
+ 243              	.LFB251:
  210:Src/stm32f1xx_it.c ****   /* USER CODE BEGIN TIM2_IRQn 1 */
  211:Src/stm32f1xx_it.c **** 
  212:Src/stm32f1xx_it.c ****   /* USER CODE END TIM2_IRQn 1 */
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  223:Src/stm32f1xx_it.c ****   HAL_TIM_IRQHandler(&htim3);
  253              		.loc 1 223 0
  254 0002 0248     		ldr	r0, .L21
-ARM GAS  /tmp/ccbXzfDN.s 			page 9
+ARM GAS  /tmp/ccEpXaeu.s 			page 9
 
 
  255 0004 FFF7FEFF 		bl	HAL_TIM_IRQHandler
@@ -489,7 +489,7 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  260              	.L21:
  261 000c 00000000 		.word	htim3
  262              		.cfi_endproc
- 263              	.LFE75:
+ 263              	.LFE251:
  265              		.text
  266              	.Letext0:
  267              		.file 2 "/usr/include/newlib/machine/_default_types.h"
@@ -501,35 +501,36 @@ ARM GAS  /tmp/ccbXzfDN.s 			page 1
  273              		.file 8 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
  274              		.file 9 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
  275              		.file 10 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
-ARM GAS  /tmp/ccbXzfDN.s 			page 10
+ 276              		.file 11 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h"
+ARM GAS  /tmp/ccEpXaeu.s 			page 10
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f1xx_it.c
-     /tmp/ccbXzfDN.s:16     .text.NMI_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:23     .text.NMI_Handler:0000000000000000 NMI_Handler
-     /tmp/ccbXzfDN.s:36     .text.HardFault_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:43     .text.HardFault_Handler:0000000000000000 HardFault_Handler
-     /tmp/ccbXzfDN.s:57     .text.MemManage_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:64     .text.MemManage_Handler:0000000000000000 MemManage_Handler
-     /tmp/ccbXzfDN.s:78     .text.BusFault_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:85     .text.BusFault_Handler:0000000000000000 BusFault_Handler
-     /tmp/ccbXzfDN.s:99     .text.UsageFault_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:106    .text.UsageFault_Handler:0000000000000000 UsageFault_Handler
-     /tmp/ccbXzfDN.s:120    .text.SVC_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:127    .text.SVC_Handler:0000000000000000 SVC_Handler
-     /tmp/ccbXzfDN.s:139    .text.DebugMon_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:146    .text.DebugMon_Handler:0000000000000000 DebugMon_Handler
-     /tmp/ccbXzfDN.s:158    .text.PendSV_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:165    .text.PendSV_Handler:0000000000000000 PendSV_Handler
-     /tmp/ccbXzfDN.s:177    .text.SysTick_Handler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:184    .text.SysTick_Handler:0000000000000000 SysTick_Handler
-     /tmp/ccbXzfDN.s:204    .text.TIM2_IRQHandler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:211    .text.TIM2_IRQHandler:0000000000000000 TIM2_IRQHandler
-     /tmp/ccbXzfDN.s:230    .text.TIM2_IRQHandler:000000000000000c $d
-     /tmp/ccbXzfDN.s:235    .text.TIM3_IRQHandler:0000000000000000 $t
-     /tmp/ccbXzfDN.s:242    .text.TIM3_IRQHandler:0000000000000000 TIM3_IRQHandler
-     /tmp/ccbXzfDN.s:261    .text.TIM3_IRQHandler:000000000000000c $d
+     /tmp/ccEpXaeu.s:16     .text.NMI_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:23     .text.NMI_Handler:0000000000000000 NMI_Handler
+     /tmp/ccEpXaeu.s:36     .text.HardFault_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:43     .text.HardFault_Handler:0000000000000000 HardFault_Handler
+     /tmp/ccEpXaeu.s:57     .text.MemManage_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:64     .text.MemManage_Handler:0000000000000000 MemManage_Handler
+     /tmp/ccEpXaeu.s:78     .text.BusFault_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:85     .text.BusFault_Handler:0000000000000000 BusFault_Handler
+     /tmp/ccEpXaeu.s:99     .text.UsageFault_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:106    .text.UsageFault_Handler:0000000000000000 UsageFault_Handler
+     /tmp/ccEpXaeu.s:120    .text.SVC_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:127    .text.SVC_Handler:0000000000000000 SVC_Handler
+     /tmp/ccEpXaeu.s:139    .text.DebugMon_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:146    .text.DebugMon_Handler:0000000000000000 DebugMon_Handler
+     /tmp/ccEpXaeu.s:158    .text.PendSV_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:165    .text.PendSV_Handler:0000000000000000 PendSV_Handler
+     /tmp/ccEpXaeu.s:177    .text.SysTick_Handler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:184    .text.SysTick_Handler:0000000000000000 SysTick_Handler
+     /tmp/ccEpXaeu.s:204    .text.TIM2_IRQHandler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:211    .text.TIM2_IRQHandler:0000000000000000 TIM2_IRQHandler
+     /tmp/ccEpXaeu.s:230    .text.TIM2_IRQHandler:000000000000000c $d
+     /tmp/ccEpXaeu.s:235    .text.TIM3_IRQHandler:0000000000000000 $t
+     /tmp/ccEpXaeu.s:242    .text.TIM3_IRQHandler:0000000000000000 TIM3_IRQHandler
+     /tmp/ccEpXaeu.s:261    .text.TIM3_IRQHandler:000000000000000c $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS

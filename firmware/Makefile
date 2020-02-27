@@ -37,6 +37,7 @@ BUILD_DIR = build
 # C sources
 C_SOURCES =  \
 stm32-servomotor/servomotor.c \
+stm32-mpu6050/mpu6050.c \
 Src/main.c \
 Src/stm32f1xx_it.c \
 Src/stm32f1xx_hal_msp.c \
@@ -115,6 +116,7 @@ AS_INCLUDES =
 # C includes
 C_INCLUDES =  \
 -Istm32-servomotor \
+-Istm32-mpu6050 \
 -IInc \
 -IDrivers/STM32F1xx_HAL_Driver/Inc \
 -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \

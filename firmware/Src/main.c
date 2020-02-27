@@ -28,6 +28,7 @@
 #include <math.h>
 #include <float.h>
 #include <servomotor.h>
+#include <mpu6050.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -177,9 +178,7 @@ int main(void)
   // Init timers
   //init_uart_messaging();
   init_servomotors();
-  /* USER CODE END 2 */
- 
- 
+  /* USER CODE END 2 */ 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

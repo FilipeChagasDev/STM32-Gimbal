@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccrx0tAT.s 			page 1
+ARM GAS  /tmp/ccvEjzhq.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -23,7 +23,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
   20              		.thumb_func
   21              		.fpu softvfp
   23              	HAL_MspInit:
-  24              	.LFB65:
+  24              	.LFB241:
   25              		.file 1 "Src/stm32f1xx_hal_msp.c"
    1:Src/stm32f1xx_hal_msp.c **** /* USER CODE BEGIN Header */
    2:Src/stm32f1xx_hal_msp.c **** /**
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
   31:Src/stm32f1xx_hal_msp.c **** /* USER CODE END TD */
   32:Src/stm32f1xx_hal_msp.c **** 
   33:Src/stm32f1xx_hal_msp.c **** /* Private define ------------------------------------------------------------*/
-ARM GAS  /tmp/ccrx0tAT.s 			page 2
+ARM GAS  /tmp/ccvEjzhq.s 			page 2
 
 
   34:Src/stm32f1xx_hal_msp.c **** /* USER CODE BEGIN Define */
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
   41 000e 02F00102 		and	r2, r2, #1
   42 0012 0092     		str	r2, [sp]
   43 0014 009A     		ldr	r2, [sp]
-ARM GAS  /tmp/ccrx0tAT.s 			page 3
+ARM GAS  /tmp/ccvEjzhq.s 			page 3
 
 
   44              	.LBE2:
@@ -167,7 +167,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
   75 003c 00100240 		.word	1073876992
   76 0040 00000140 		.word	1073807360
   77              		.cfi_endproc
-  78              	.LFE65:
+  78              	.LFE241:
   80              		.section	.text.HAL_I2C_MspInit,"ax",%progbits
   81              		.align	1
   82              		.global	HAL_I2C_MspInit
@@ -176,9 +176,9 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
   85              		.thumb_func
   86              		.fpu softvfp
   88              	HAL_I2C_MspInit:
-  89              	.LFB66:
+  89              	.LFB242:
   85:Src/stm32f1xx_hal_msp.c **** 
-ARM GAS  /tmp/ccrx0tAT.s 			page 4
+ARM GAS  /tmp/ccvEjzhq.s 			page 4
 
 
   86:Src/stm32f1xx_hal_msp.c **** /**
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  114:Src/stm32f1xx_hal_msp.c **** 
  115:Src/stm32f1xx_hal_msp.c ****   /* USER CODE END I2C2_MspInit 1 */
  116:Src/stm32f1xx_hal_msp.c ****   }
-ARM GAS  /tmp/ccrx0tAT.s 			page 5
+ARM GAS  /tmp/ccvEjzhq.s 			page 5
 
 
  117:Src/stm32f1xx_hal_msp.c **** 
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  162              	.LBE6:
  163              		.loc 1 118 0
  164 0056 DEE7     		b	.L5
-ARM GAS  /tmp/ccrx0tAT.s 			page 6
+ARM GAS  /tmp/ccvEjzhq.s 			page 6
 
 
  165              	.L10:
@@ -308,7 +308,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  169 005c 00100240 		.word	1073876992
  170 0060 000C0140 		.word	1073810432
  171              		.cfi_endproc
- 172              	.LFE66:
+ 172              	.LFE242:
  174              		.section	.text.HAL_I2C_MspDeInit,"ax",%progbits
  175              		.align	1
  176              		.global	HAL_I2C_MspDeInit
@@ -317,7 +317,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  179              		.thumb_func
  180              		.fpu softvfp
  182              	HAL_I2C_MspDeInit:
- 183              	.LFB67:
+ 183              	.LFB243:
  119:Src/stm32f1xx_hal_msp.c **** 
  120:Src/stm32f1xx_hal_msp.c **** /**
  121:Src/stm32f1xx_hal_msp.c **** * @brief I2C MSP De-Initialization
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  205 000c 064A     		ldr	r2, .L15+4
  206 000e D369     		ldr	r3, [r2, #28]
  207 0010 23F48003 		bic	r3, r3, #4194304
-ARM GAS  /tmp/ccrx0tAT.s 			page 7
+ARM GAS  /tmp/ccvEjzhq.s 			page 7
 
 
  208 0014 D361     		str	r3, [r2, #28]
@@ -390,7 +390,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  221 0028 00100240 		.word	1073876992
  222 002c 000C0140 		.word	1073810432
  223              		.cfi_endproc
- 224              	.LFE67:
+ 224              	.LFE243:
  226              		.section	.text.HAL_RTC_MspInit,"ax",%progbits
  227              		.align	1
  228              		.global	HAL_RTC_MspInit
@@ -399,7 +399,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  231              		.thumb_func
  232              		.fpu softvfp
  234              	HAL_RTC_MspInit:
- 235              	.LFB68:
+ 235              	.LFB244:
  148:Src/stm32f1xx_hal_msp.c **** 
  149:Src/stm32f1xx_hal_msp.c **** /**
  150:Src/stm32f1xx_hal_msp.c **** * @brief RTC MSP Initialization
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  241              		.loc 1 157 0
  242 0000 0268     		ldr	r2, [r0]
  243 0002 0C4B     		ldr	r3, .L24
-ARM GAS  /tmp/ccrx0tAT.s 			page 8
+ARM GAS  /tmp/ccvEjzhq.s 			page 8
 
 
  244 0004 9A42     		cmp	r2, r3
@@ -478,12 +478,12 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  282              	.L24:
  283 0034 00280040 		.word	1073752064
  284 0038 00100240 		.word	1073876992
-ARM GAS  /tmp/ccrx0tAT.s 			page 9
+ARM GAS  /tmp/ccvEjzhq.s 			page 9
 
 
  285 003c 3C044242 		.word	1111622716
  286              		.cfi_endproc
- 287              	.LFE68:
+ 287              	.LFE244:
  289              		.section	.text.HAL_RTC_MspDeInit,"ax",%progbits
  290              		.align	1
  291              		.global	HAL_RTC_MspDeInit
@@ -492,7 +492,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  294              		.thumb_func
  295              		.fpu softvfp
  297              	HAL_RTC_MspDeInit:
- 298              	.LFB69:
+ 298              	.LFB245:
  173:Src/stm32f1xx_hal_msp.c **** 
  174:Src/stm32f1xx_hal_msp.c **** /**
  175:Src/stm32f1xx_hal_msp.c **** * @brief RTC MSP De-Initialization
@@ -538,13 +538,13 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  319              	.L30:
  320 0012 00BF     		.align	2
  321              	.L29:
-ARM GAS  /tmp/ccrx0tAT.s 			page 10
+ARM GAS  /tmp/ccvEjzhq.s 			page 10
 
 
  322 0014 00280040 		.word	1073752064
  323 0018 3C044242 		.word	1111622716
  324              		.cfi_endproc
- 325              	.LFE69:
+ 325              	.LFE245:
  327              		.section	.text.HAL_TIM_Base_MspInit,"ax",%progbits
  328              		.align	1
  329              		.global	HAL_TIM_Base_MspInit
@@ -553,7 +553,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  332              		.thumb_func
  333              		.fpu softvfp
  335              	HAL_TIM_Base_MspInit:
- 336              	.LFB70:
+ 336              	.LFB246:
  195:Src/stm32f1xx_hal_msp.c **** 
  196:Src/stm32f1xx_hal_msp.c **** /**
  197:Src/stm32f1xx_hal_msp.c **** * @brief TIM_Base MSP Initialization
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  354 000c 164A     		ldr	r2, .L37
  355 000e 9342     		cmp	r3, r2
  356 0010 16D0     		beq	.L36
-ARM GAS  /tmp/ccrx0tAT.s 			page 11
+ARM GAS  /tmp/ccvEjzhq.s 			page 11
 
 
  357              	.LVL17:
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  393              	.LVL22:
  394              	.L36:
  395              	.LBB9:
-ARM GAS  /tmp/ccrx0tAT.s 			page 12
+ARM GAS  /tmp/ccvEjzhq.s 			page 12
 
 
  224:Src/stm32f1xx_hal_msp.c ****     /* TIM3 interrupt Init */
@@ -693,7 +693,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  422 0068 00040040 		.word	1073742848
  423 006c 00100240 		.word	1073876992
  424              		.cfi_endproc
- 425              	.LFE70:
+ 425              	.LFE246:
  427              		.section	.text.HAL_TIM_MspPostInit,"ax",%progbits
  428              		.align	1
  429              		.global	HAL_TIM_MspPostInit
@@ -702,7 +702,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  432              		.thumb_func
  433              		.fpu softvfp
  435              	HAL_TIM_MspPostInit:
- 436              	.LFB71:
+ 436              	.LFB247:
  234:Src/stm32f1xx_hal_msp.c **** 
  235:Src/stm32f1xx_hal_msp.c **** void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
  236:Src/stm32f1xx_hal_msp.c **** {
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  446 0002 87B0     		sub	sp, sp, #28
  447              	.LCFI15:
  448              		.cfi_def_cfa_offset 32
-ARM GAS  /tmp/ccrx0tAT.s 			page 13
+ARM GAS  /tmp/ccvEjzhq.s 			page 13
 
 
  237:Src/stm32f1xx_hal_msp.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  479 0028 9B69     		ldr	r3, [r3, #24]
  480 002a 03F00403 		and	r3, r3, #4
  481 002e 0193     		str	r3, [sp, #4]
-ARM GAS  /tmp/ccrx0tAT.s 			page 14
+ARM GAS  /tmp/ccvEjzhq.s 			page 14
 
 
  482 0030 019B     		ldr	r3, [sp, #4]
@@ -809,7 +809,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  503 0048 00040040 		.word	1073742848
  504 004c 00080140 		.word	1073809408
  505              		.cfi_endproc
- 506              	.LFE71:
+ 506              	.LFE247:
  508              		.section	.text.HAL_TIM_Base_MspDeInit,"ax",%progbits
  509              		.align	1
  510              		.global	HAL_TIM_Base_MspDeInit
@@ -818,7 +818,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  513              		.thumb_func
  514              		.fpu softvfp
  516              	HAL_TIM_Base_MspDeInit:
- 517              	.LFB72:
+ 517              	.LFB248:
  260:Src/stm32f1xx_hal_msp.c **** /**
  261:Src/stm32f1xx_hal_msp.c **** * @brief TIM_Base MSP De-Initialization
  262:Src/stm32f1xx_hal_msp.c **** * This function freeze the hardware resources used in this example
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  526              		.cfi_offset 3, -8
  527              		.cfi_offset 14, -4
  268:Src/stm32f1xx_hal_msp.c ****   if(htim_base->Instance==TIM2)
-ARM GAS  /tmp/ccrx0tAT.s 			page 15
+ARM GAS  /tmp/ccvEjzhq.s 			page 15
 
 
  528              		.loc 1 268 0
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  290:Src/stm32f1xx_hal_msp.c ****     /* TIM3 interrupt DeInit */
  291:Src/stm32f1xx_hal_msp.c ****     HAL_NVIC_DisableIRQ(TIM3_IRQn);
  559              		.loc 1 291 0
-ARM GAS  /tmp/ccrx0tAT.s 			page 16
+ARM GAS  /tmp/ccvEjzhq.s 			page 16
 
 
  560 0030 1D20     		movs	r0, #29
@@ -919,7 +919,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  569 0038 00040040 		.word	1073742848
  570 003c 00100240 		.word	1073876992
  571              		.cfi_endproc
- 572              	.LFE72:
+ 572              	.LFE248:
  574              		.section	.text.HAL_UART_MspInit,"ax",%progbits
  575              		.align	1
  576              		.global	HAL_UART_MspInit
@@ -928,7 +928,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  579              		.thumb_func
  580              		.fpu softvfp
  582              	HAL_UART_MspInit:
- 583              	.LFB73:
+ 583              	.LFB249:
  298:Src/stm32f1xx_hal_msp.c **** 
  299:Src/stm32f1xx_hal_msp.c **** /**
  300:Src/stm32f1xx_hal_msp.c **** * @brief UART MSP Initialization
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  600 0008 0393     		str	r3, [sp, #12]
  601 000a 0493     		str	r3, [sp, #16]
  602 000c 0593     		str	r3, [sp, #20]
-ARM GAS  /tmp/ccrx0tAT.s 			page 17
+ARM GAS  /tmp/ccvEjzhq.s 			page 17
 
 
  308:Src/stm32f1xx_hal_msp.c ****   if(huart->Instance==USART1)
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  625 0020 42F48042 		orr	r2, r2, #16384
  626 0024 9A61     		str	r2, [r3, #24]
  627 0026 9A69     		ldr	r2, [r3, #24]
-ARM GAS  /tmp/ccrx0tAT.s 			page 18
+ARM GAS  /tmp/ccvEjzhq.s 			page 18
 
 
  628 0028 02F48042 		and	r2, r2, #16384
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  672              		.loc 1 331 0
  673 006a 064A     		ldr	r2, .L57+8
  674 006c 5368     		ldr	r3, [r2, #4]
-ARM GAS  /tmp/ccrx0tAT.s 			page 19
+ARM GAS  /tmp/ccvEjzhq.s 			page 19
 
 
  675              	.LVL45:
@@ -1097,7 +1097,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  688 0080 000C0140 		.word	1073810432
  689 0084 00000140 		.word	1073807360
  690              		.cfi_endproc
- 691              	.LFE73:
+ 691              	.LFE249:
  693              		.section	.text.HAL_UART_MspDeInit,"ax",%progbits
  694              		.align	1
  695              		.global	HAL_UART_MspDeInit
@@ -1106,7 +1106,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  698              		.thumb_func
  699              		.fpu softvfp
  701              	HAL_UART_MspDeInit:
- 702              	.LFB74:
+ 702              	.LFB250:
  339:Src/stm32f1xx_hal_msp.c **** 
  340:Src/stm32f1xx_hal_msp.c **** /**
  341:Src/stm32f1xx_hal_msp.c **** * @brief UART MSP De-Initialization
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  721              	.LVL50:
  722              	.L62:
  349:Src/stm32f1xx_hal_msp.c ****   {
-ARM GAS  /tmp/ccrx0tAT.s 			page 20
+ARM GAS  /tmp/ccvEjzhq.s 			page 20
 
 
  350:Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN USART1_MspDeInit 0 */
@@ -1179,7 +1179,7 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  740 0024 00100240 		.word	1073876992
  741 0028 000C0140 		.word	1073810432
  742              		.cfi_endproc
- 743              	.LFE74:
+ 743              	.LFE250:
  745              		.text
  746              	.Letext0:
  747              		.file 2 "/usr/include/newlib/machine/_default_types.h"
@@ -1196,46 +1196,47 @@ ARM GAS  /tmp/ccrx0tAT.s 			page 1
  758              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
  759              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
  760              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
- 761              		.file 16 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
- 762              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h"
-ARM GAS  /tmp/ccrx0tAT.s 			page 21
+ 761              		.file 16 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h"
+ 762              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
+ARM GAS  /tmp/ccvEjzhq.s 			page 21
 
 
-ARM GAS  /tmp/ccrx0tAT.s 			page 22
+ 763              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h"
+ARM GAS  /tmp/ccvEjzhq.s 			page 22
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f1xx_hal_msp.c
-     /tmp/ccrx0tAT.s:16     .text.HAL_MspInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:23     .text.HAL_MspInit:0000000000000000 HAL_MspInit
-     /tmp/ccrx0tAT.s:75     .text.HAL_MspInit:000000000000003c $d
-     /tmp/ccrx0tAT.s:81     .text.HAL_I2C_MspInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:88     .text.HAL_I2C_MspInit:0000000000000000 HAL_I2C_MspInit
-     /tmp/ccrx0tAT.s:168    .text.HAL_I2C_MspInit:0000000000000058 $d
-     /tmp/ccrx0tAT.s:175    .text.HAL_I2C_MspDeInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:182    .text.HAL_I2C_MspDeInit:0000000000000000 HAL_I2C_MspDeInit
-     /tmp/ccrx0tAT.s:220    .text.HAL_I2C_MspDeInit:0000000000000024 $d
-     /tmp/ccrx0tAT.s:227    .text.HAL_RTC_MspInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:234    .text.HAL_RTC_MspInit:0000000000000000 HAL_RTC_MspInit
-     /tmp/ccrx0tAT.s:283    .text.HAL_RTC_MspInit:0000000000000034 $d
-     /tmp/ccrx0tAT.s:290    .text.HAL_RTC_MspDeInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:297    .text.HAL_RTC_MspDeInit:0000000000000000 HAL_RTC_MspDeInit
-     /tmp/ccrx0tAT.s:322    .text.HAL_RTC_MspDeInit:0000000000000014 $d
-     /tmp/ccrx0tAT.s:328    .text.HAL_TIM_Base_MspInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:335    .text.HAL_TIM_Base_MspInit:0000000000000000 HAL_TIM_Base_MspInit
-     /tmp/ccrx0tAT.s:422    .text.HAL_TIM_Base_MspInit:0000000000000068 $d
-     /tmp/ccrx0tAT.s:428    .text.HAL_TIM_MspPostInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:435    .text.HAL_TIM_MspPostInit:0000000000000000 HAL_TIM_MspPostInit
-     /tmp/ccrx0tAT.s:503    .text.HAL_TIM_MspPostInit:0000000000000048 $d
-     /tmp/ccrx0tAT.s:509    .text.HAL_TIM_Base_MspDeInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:516    .text.HAL_TIM_Base_MspDeInit:0000000000000000 HAL_TIM_Base_MspDeInit
-     /tmp/ccrx0tAT.s:569    .text.HAL_TIM_Base_MspDeInit:0000000000000038 $d
-     /tmp/ccrx0tAT.s:575    .text.HAL_UART_MspInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:582    .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
-     /tmp/ccrx0tAT.s:687    .text.HAL_UART_MspInit:000000000000007c $d
-     /tmp/ccrx0tAT.s:694    .text.HAL_UART_MspDeInit:0000000000000000 $t
-     /tmp/ccrx0tAT.s:701    .text.HAL_UART_MspDeInit:0000000000000000 HAL_UART_MspDeInit
-     /tmp/ccrx0tAT.s:739    .text.HAL_UART_MspDeInit:0000000000000020 $d
+     /tmp/ccvEjzhq.s:16     .text.HAL_MspInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:23     .text.HAL_MspInit:0000000000000000 HAL_MspInit
+     /tmp/ccvEjzhq.s:75     .text.HAL_MspInit:000000000000003c $d
+     /tmp/ccvEjzhq.s:81     .text.HAL_I2C_MspInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:88     .text.HAL_I2C_MspInit:0000000000000000 HAL_I2C_MspInit
+     /tmp/ccvEjzhq.s:168    .text.HAL_I2C_MspInit:0000000000000058 $d
+     /tmp/ccvEjzhq.s:175    .text.HAL_I2C_MspDeInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:182    .text.HAL_I2C_MspDeInit:0000000000000000 HAL_I2C_MspDeInit
+     /tmp/ccvEjzhq.s:220    .text.HAL_I2C_MspDeInit:0000000000000024 $d
+     /tmp/ccvEjzhq.s:227    .text.HAL_RTC_MspInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:234    .text.HAL_RTC_MspInit:0000000000000000 HAL_RTC_MspInit
+     /tmp/ccvEjzhq.s:283    .text.HAL_RTC_MspInit:0000000000000034 $d
+     /tmp/ccvEjzhq.s:290    .text.HAL_RTC_MspDeInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:297    .text.HAL_RTC_MspDeInit:0000000000000000 HAL_RTC_MspDeInit
+     /tmp/ccvEjzhq.s:322    .text.HAL_RTC_MspDeInit:0000000000000014 $d
+     /tmp/ccvEjzhq.s:328    .text.HAL_TIM_Base_MspInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:335    .text.HAL_TIM_Base_MspInit:0000000000000000 HAL_TIM_Base_MspInit
+     /tmp/ccvEjzhq.s:422    .text.HAL_TIM_Base_MspInit:0000000000000068 $d
+     /tmp/ccvEjzhq.s:428    .text.HAL_TIM_MspPostInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:435    .text.HAL_TIM_MspPostInit:0000000000000000 HAL_TIM_MspPostInit
+     /tmp/ccvEjzhq.s:503    .text.HAL_TIM_MspPostInit:0000000000000048 $d
+     /tmp/ccvEjzhq.s:509    .text.HAL_TIM_Base_MspDeInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:516    .text.HAL_TIM_Base_MspDeInit:0000000000000000 HAL_TIM_Base_MspDeInit
+     /tmp/ccvEjzhq.s:569    .text.HAL_TIM_Base_MspDeInit:0000000000000038 $d
+     /tmp/ccvEjzhq.s:575    .text.HAL_UART_MspInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:582    .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
+     /tmp/ccvEjzhq.s:687    .text.HAL_UART_MspInit:000000000000007c $d
+     /tmp/ccvEjzhq.s:694    .text.HAL_UART_MspDeInit:0000000000000000 $t
+     /tmp/ccvEjzhq.s:701    .text.HAL_UART_MspDeInit:0000000000000000 HAL_UART_MspDeInit
+     /tmp/ccvEjzhq.s:739    .text.HAL_UART_MspDeInit:0000000000000020 $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS
