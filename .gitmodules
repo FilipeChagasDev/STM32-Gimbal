@@ -4,3 +4,6 @@
 [submodule "firmware/stm32-mpu6050"]
 	path = firmware/stm32-mpu6050
 	url = https://github.com/FilipeChagasDev/stm32-mpu6050
+[submodule "firmware/signals"]
+	path = firmware/signals
+	url = https://github.com/FilipeChagasDev/signals

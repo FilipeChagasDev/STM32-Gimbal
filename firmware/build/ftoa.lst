@@ -1,0 +1,463 @@
+ARM GAS  /tmp/ccmCDbei.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"ftoa.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.write_char,"ax",%progbits
+  16              		.align	1
+  17              		.global	write_char
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	write_char:
+  24              	.LFB0:
+  25              		.file 1 "Src/ftoa.c"
+   1:Src/ftoa.c    **** #include <ftoa.h>
+   2:Src/ftoa.c    **** 
+   3:Src/ftoa.c    **** #define DIGIT_TO_CHAR(d) ('0'+d)
+   4:Src/ftoa.c    **** 
+   5:Src/ftoa.c    **** void write_char(char c, char* str, uintmax_t *stri)
+   6:Src/ftoa.c    **** {
+  26              		.loc 1 6 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31              	.LVL0:
+   7:Src/ftoa.c    ****     str[*stri] = c;
+  32              		.loc 1 7 0
+  33 0000 1368     		ldr	r3, [r2]
+  34 0002 C854     		strb	r0, [r1, r3]
+   8:Src/ftoa.c    ****     (*stri)++;
+  35              		.loc 1 8 0
+  36 0004 D2E90001 		ldrd	r0, [r2]
+  37              	.LVL1:
+  38 0008 0130     		adds	r0, r0, #1
+  39 000a 41F10001 		adc	r1, r1, #0
+  40              	.LVL2:
+  41 000e C2E90001 		strd	r0, [r2]
+  42              	.LVL3:
+  43 0012 7047     		bx	lr
+  44              		.cfi_endproc
+  45              	.LFE0:
+  47              		.global	__aeabi_fcmplt
+  48              		.section	.text.write_real_signal,"ax",%progbits
+  49              		.align	1
+  50              		.global	write_real_signal
+  51              		.syntax unified
+ARM GAS  /tmp/ccmCDbei.s 			page 2
+
+
+  52              		.thumb
+  53              		.thumb_func
+  54              		.fpu softvfp
+  56              	write_real_signal:
+  57              	.LFB1:
+   9:Src/ftoa.c    **** }
+  10:Src/ftoa.c    **** 
+  11:Src/ftoa.c    **** float write_real_signal(float number, char* str, uintmax_t *stri)
+  12:Src/ftoa.c    **** {
+  58              		.loc 1 12 0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62              	.LVL4:
+  63 0000 70B5     		push	{r4, r5, r6, lr}
+  64              	.LCFI0:
+  65              		.cfi_def_cfa_offset 16
+  66              		.cfi_offset 4, -16
+  67              		.cfi_offset 5, -12
+  68              		.cfi_offset 6, -8
+  69              		.cfi_offset 14, -4
+  70 0002 0446     		mov	r4, r0
+  71 0004 0D46     		mov	r5, r1
+  72 0006 1646     		mov	r6, r2
+  13:Src/ftoa.c    ****     float abs;
+  14:Src/ftoa.c    ****     if(number < 0)
+  73              		.loc 1 14 0
+  74 0008 0021     		movs	r1, #0
+  75              	.LVL5:
+  76 000a FFF7FEFF 		bl	__aeabi_fcmplt
+  77              	.LVL6:
+  78 000e 08B9     		cbnz	r0, .L7
+  79              	.LVL7:
+  80              	.L3:
+  15:Src/ftoa.c    ****     {
+  16:Src/ftoa.c    ****         abs = -number;
+  17:Src/ftoa.c    ****         write_char('-', str, stri);
+  18:Src/ftoa.c    ****     }
+  19:Src/ftoa.c    ****     else
+  20:Src/ftoa.c    ****     {
+  21:Src/ftoa.c    ****         abs = number;
+  22:Src/ftoa.c    ****     }
+  23:Src/ftoa.c    **** 
+  24:Src/ftoa.c    ****     return abs;
+  25:Src/ftoa.c    **** }
+  81              		.loc 1 25 0
+  82 0010 2046     		mov	r0, r4
+  83 0012 70BD     		pop	{r4, r5, r6, pc}
+  84              	.LVL8:
+  85              	.L7:
+  16:Src/ftoa.c    ****         write_char('-', str, stri);
+  86              		.loc 1 16 0
+  87 0014 04F10044 		add	r4, r4, #-2147483648
+  88              	.LVL9:
+  17:Src/ftoa.c    ****     }
+  89              		.loc 1 17 0
+  90 0018 3246     		mov	r2, r6
+ARM GAS  /tmp/ccmCDbei.s 			page 3
+
+
+  91 001a 2946     		mov	r1, r5
+  92 001c 2D20     		movs	r0, #45
+  93 001e FFF7FEFF 		bl	write_char
+  94              	.LVL10:
+  95 0022 F5E7     		b	.L3
+  96              		.cfi_endproc
+  97              	.LFE1:
+  99              		.section	.text.write_natural_with_dot,"ax",%progbits
+ 100              		.align	1
+ 101              		.global	write_natural_with_dot
+ 102              		.syntax unified
+ 103              		.thumb
+ 104              		.thumb_func
+ 105              		.fpu softvfp
+ 107              	write_natural_with_dot:
+ 108              	.LFB2:
+  26:Src/ftoa.c    **** 
+  27:Src/ftoa.c    **** void write_natural_with_dot(uint32_t number, int dot_position, char* str, uintmax_t *stri, unsigned
+  28:Src/ftoa.c    **** {
+ 109              		.loc 1 28 0
+ 110              		.cfi_startproc
+ 111              		@ args = 4, pretend = 0, frame = 0
+ 112              		@ frame_needed = 0, uses_anonymous_args = 0
+ 113              	.LVL11:
+ 114 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 115              	.LCFI1:
+ 116              		.cfi_def_cfa_offset 28
+ 117              		.cfi_offset 4, -28
+ 118              		.cfi_offset 5, -24
+ 119              		.cfi_offset 6, -20
+ 120              		.cfi_offset 7, -16
+ 121              		.cfi_offset 8, -12
+ 122              		.cfi_offset 9, -8
+ 123              		.cfi_offset 14, -4
+ 124 0004 83B0     		sub	sp, sp, #12
+ 125              	.LCFI2:
+ 126              		.cfi_def_cfa_offset 40
+ 127 0006 0A9F     		ldr	r7, [sp, #40]
+  29:Src/ftoa.c    ****     uint32_t next_number = number / 10;
+ 128              		.loc 1 29 0
+ 129 0008 124D     		ldr	r5, .L14
+ 130 000a A5FB0045 		umull	r4, r5, r5, r0
+ 131              	.LVL12:
+  30:Src/ftoa.c    ****     int next_dot_pos = dot_position - 1;
+  31:Src/ftoa.c    **** 
+  32:Src/ftoa.c    ****     if(dotn+1 == -dot_position) return;
+ 132              		.loc 1 32 0
+ 133 000e 7C1C     		adds	r4, r7, #1
+ 134 0010 CC42     		cmn	r4, r1
+ 135 0012 0FD0     		beq	.L8
+ 136 0014 ED08     		lsrs	r5, r5, #3
+ 137              	.LVL13:
+ 138 0016 01F1FF3E 		add	lr, r1, #-1
+ 139              	.LVL14:
+ 140 001a 9846     		mov	r8, r3
+ 141 001c 9146     		mov	r9, r2
+ 142 001e 0E46     		mov	r6, r1
+ARM GAS  /tmp/ccmCDbei.s 			page 4
+
+
+ 143 0020 0446     		mov	r4, r0
+  33:Src/ftoa.c    ****     if(next_number > 0) write_natural_with_dot(next_number, next_dot_pos, str, stri, dotn);
+ 144              		.loc 1 33 0
+ 145 0022 55B9     		cbnz	r5, .L12
+ 146              	.LVL15:
+ 147              	.L10:
+  34:Src/ftoa.c    **** 
+  35:Src/ftoa.c    ****     char out = DIGIT_TO_CHAR(number);
+ 148              		.loc 1 35 0
+ 149 0024 E0B2     		uxtb	r0, r4
+ 150 0026 3030     		adds	r0, r0, #48
+ 151              	.LVL16:
+  36:Src/ftoa.c    ****     write_char(out, str, stri);
+ 152              		.loc 1 36 0
+ 153 0028 4246     		mov	r2, r8
+ 154 002a 4946     		mov	r1, r9
+ 155 002c C0B2     		uxtb	r0, r0
+ 156 002e FFF7FEFF 		bl	write_char
+ 157              	.LVL17:
+  37:Src/ftoa.c    ****     if(dot_position == 0) write_char('.', str, stri);
+ 158              		.loc 1 37 0
+ 159 0032 46B1     		cbz	r6, .L13
+ 160              	.LVL18:
+ 161              	.L8:
+  38:Src/ftoa.c    **** }
+ 162              		.loc 1 38 0
+ 163 0034 03B0     		add	sp, sp, #12
+ 164              	.LCFI3:
+ 165              		.cfi_remember_state
+ 166              		.cfi_def_cfa_offset 28
+ 167              		@ sp needed
+ 168 0036 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 169              	.LVL19:
+ 170              	.L12:
+ 171              	.LCFI4:
+ 172              		.cfi_restore_state
+  33:Src/ftoa.c    **** 
+ 173              		.loc 1 33 0 discriminator 1
+ 174 003a 0097     		str	r7, [sp]
+ 175 003c 7146     		mov	r1, lr
+ 176              	.LVL20:
+ 177 003e 2846     		mov	r0, r5
+ 178              	.LVL21:
+ 179 0040 FFF7FEFF 		bl	write_natural_with_dot
+ 180              	.LVL22:
+ 181 0044 EEE7     		b	.L10
+ 182              	.LVL23:
+ 183              	.L13:
+  37:Src/ftoa.c    ****     if(dot_position == 0) write_char('.', str, stri);
+ 184              		.loc 1 37 0 discriminator 1
+ 185 0046 4246     		mov	r2, r8
+ 186 0048 4946     		mov	r1, r9
+ 187 004a 2E20     		movs	r0, #46
+ 188 004c FFF7FEFF 		bl	write_char
+ 189              	.LVL24:
+ 190 0050 F0E7     		b	.L8
+ 191              	.L15:
+ARM GAS  /tmp/ccmCDbei.s 			page 5
+
+
+ 192 0052 00BF     		.align	2
+ 193              	.L14:
+ 194 0054 CDCCCCCC 		.word	-858993459
+ 195              		.cfi_endproc
+ 196              	.LFE2:
+ 198              		.global	__aeabi_f2uiz
+ 199              		.global	__aeabi_ui2f
+ 200              		.global	__aeabi_fmul
+ 201              		.global	__aeabi_fcmpeq
+ 202              		.section	.text.write_real,"ax",%progbits
+ 203              		.align	1
+ 204              		.global	write_real
+ 205              		.syntax unified
+ 206              		.thumb
+ 207              		.thumb_func
+ 208              		.fpu softvfp
+ 210              	write_real:
+ 211              	.LFB3:
+  39:Src/ftoa.c    **** 
+  40:Src/ftoa.c    **** void write_real(float number, char* str, uintmax_t *stri, unsigned int dotn)
+  41:Src/ftoa.c    **** {
+ 212              		.loc 1 41 0
+ 213              		.cfi_startproc
+ 214              		@ args = 0, pretend = 0, frame = 0
+ 215              		@ frame_needed = 0, uses_anonymous_args = 0
+ 216              	.LVL25:
+ 217 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 218              	.LCFI5:
+ 219              		.cfi_def_cfa_offset 28
+ 220              		.cfi_offset 4, -28
+ 221              		.cfi_offset 5, -24
+ 222              		.cfi_offset 6, -20
+ 223              		.cfi_offset 7, -16
+ 224              		.cfi_offset 8, -12
+ 225              		.cfi_offset 9, -8
+ 226              		.cfi_offset 14, -4
+ 227 0004 83B0     		sub	sp, sp, #12
+ 228              	.LCFI6:
+ 229              		.cfi_def_cfa_offset 40
+ 230 0006 0F46     		mov	r7, r1
+ 231 0008 9046     		mov	r8, r2
+ 232 000a 9946     		mov	r9, r3
+  42:Src/ftoa.c    ****     float current_num = write_real_signal(number, str, stri);
+ 233              		.loc 1 42 0
+ 234 000c FFF7FEFF 		bl	write_real_signal
+ 235              	.LVL26:
+ 236 0010 0446     		mov	r4, r0
+ 237              	.LVL27:
+  43:Src/ftoa.c    ****     float current_floor = ((uint32_t)current_num);
+ 238              		.loc 1 43 0
+ 239 0012 FFF7FEFF 		bl	__aeabi_f2uiz
+ 240              	.LVL28:
+ 241 0016 FFF7FEFF 		bl	__aeabi_ui2f
+ 242              	.LVL29:
+ 243 001a 0546     		mov	r5, r0
+ 244              	.LVL30:
+  44:Src/ftoa.c    ****     int dot_position = 0;
+ARM GAS  /tmp/ccmCDbei.s 			page 6
+
+
+ 245              		.loc 1 44 0
+ 246 001c 0026     		movs	r6, #0
+  45:Src/ftoa.c    **** 
+  46:Src/ftoa.c    ****     while(current_num != current_floor)
+ 247              		.loc 1 46 0
+ 248 001e 0AE0     		b	.L17
+ 249              	.LVL31:
+ 250              	.L18:
+  47:Src/ftoa.c    ****     {
+  48:Src/ftoa.c    ****         current_num *= 10;
+ 251              		.loc 1 48 0
+ 252 0020 0E49     		ldr	r1, .L20
+ 253 0022 2046     		mov	r0, r4
+ 254 0024 FFF7FEFF 		bl	__aeabi_fmul
+ 255              	.LVL32:
+ 256 0028 0446     		mov	r4, r0
+ 257              	.LVL33:
+  49:Src/ftoa.c    ****         current_floor = ((uint32_t)current_num);
+ 258              		.loc 1 49 0
+ 259 002a FFF7FEFF 		bl	__aeabi_f2uiz
+ 260              	.LVL34:
+ 261 002e FFF7FEFF 		bl	__aeabi_ui2f
+ 262              	.LVL35:
+ 263 0032 0546     		mov	r5, r0
+ 264              	.LVL36:
+  50:Src/ftoa.c    ****         dot_position++;
+ 265              		.loc 1 50 0
+ 266 0034 0136     		adds	r6, r6, #1
+ 267              	.LVL37:
+ 268              	.L17:
+  46:Src/ftoa.c    ****     {
+ 269              		.loc 1 46 0
+ 270 0036 2946     		mov	r1, r5
+ 271 0038 2046     		mov	r0, r4
+ 272              	.LVL38:
+ 273 003a FFF7FEFF 		bl	__aeabi_fcmpeq
+ 274              	.LVL39:
+ 275 003e 0028     		cmp	r0, #0
+ 276 0040 EED0     		beq	.L18
+  51:Src/ftoa.c    ****     }
+  52:Src/ftoa.c    **** 
+  53:Src/ftoa.c    ****     write_natural_with_dot(current_floor, dot_position, str, stri, dotn);
+ 277              		.loc 1 53 0
+ 278 0042 2846     		mov	r0, r5
+ 279 0044 FFF7FEFF 		bl	__aeabi_f2uiz
+ 280              	.LVL40:
+ 281 0048 CDF80090 		str	r9, [sp]
+ 282 004c 4346     		mov	r3, r8
+ 283 004e 3A46     		mov	r2, r7
+ 284 0050 3146     		mov	r1, r6
+ 285 0052 FFF7FEFF 		bl	write_natural_with_dot
+ 286              	.LVL41:
+  54:Src/ftoa.c    **** }
+ 287              		.loc 1 54 0
+ 288 0056 03B0     		add	sp, sp, #12
+ 289              	.LCFI7:
+ 290              		.cfi_def_cfa_offset 28
+ARM GAS  /tmp/ccmCDbei.s 			page 7
+
+
+ 291              		@ sp needed
+ 292 0058 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 293              	.LVL42:
+ 294              	.L21:
+ 295              		.align	2
+ 296              	.L20:
+ 297 005c 00002041 		.word	1092616192
+ 298              		.cfi_endproc
+ 299              	.LFE3:
+ 301              		.section	.text.ftoa,"ax",%progbits
+ 302              		.align	1
+ 303              		.global	ftoa
+ 304              		.syntax unified
+ 305              		.thumb
+ 306              		.thumb_func
+ 307              		.fpu softvfp
+ 309              	ftoa:
+ 310              	.LFB4:
+  55:Src/ftoa.c    **** 
+  56:Src/ftoa.c    **** int ftoa(float value, char *str, unsigned int dotn)
+  57:Src/ftoa.c    **** {
+ 311              		.loc 1 57 0
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 8
+ 314              		@ frame_needed = 0, uses_anonymous_args = 0
+ 315              	.LVL43:
+ 316 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 317              	.LCFI8:
+ 318              		.cfi_def_cfa_offset 20
+ 319              		.cfi_offset 4, -20
+ 320              		.cfi_offset 5, -16
+ 321              		.cfi_offset 6, -12
+ 322              		.cfi_offset 7, -8
+ 323              		.cfi_offset 14, -4
+ 324 0002 83B0     		sub	sp, sp, #12
+ 325              	.LCFI9:
+ 326              		.cfi_def_cfa_offset 32
+ 327 0004 0D46     		mov	r5, r1
+  58:Src/ftoa.c    ****     uintmax_t stri = 0;
+ 328              		.loc 1 58 0
+ 329 0006 02AC     		add	r4, sp, #8
+ 330 0008 0026     		movs	r6, #0
+ 331 000a 0027     		movs	r7, #0
+ 332 000c 64E90267 		strd	r6, [r4, #-8]!
+  59:Src/ftoa.c    ****     write_real(value, str, &stri, dotn);
+ 333              		.loc 1 59 0
+ 334 0010 1346     		mov	r3, r2
+ 335 0012 2246     		mov	r2, r4
+ 336              	.LVL44:
+ 337 0014 FFF7FEFF 		bl	write_real
+ 338              	.LVL45:
+  60:Src/ftoa.c    ****     write_char('\0', str, stri);
+ 339              		.loc 1 60 0
+ 340 0018 009A     		ldr	r2, [sp]
+ 341 001a 2946     		mov	r1, r5
+ 342 001c 0020     		movs	r0, #0
+ 343 001e FFF7FEFF 		bl	write_char
+ARM GAS  /tmp/ccmCDbei.s 			page 8
+
+
+ 344              	.LVL46:
+  61:Src/ftoa.c    **** }...
+ 345              		.loc 1 61 0
+ 346 0022 03B0     		add	sp, sp, #12
+ 347              	.LCFI10:
+ 348              		.cfi_def_cfa_offset 20
+ 349              		@ sp needed
+ 350 0024 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 351              		.cfi_endproc
+ 352              	.LFE4:
+ 354              		.text
+ 355              	.Letext0:
+ 356              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 357              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 358              		.file 4 "/usr/include/newlib/stdint.h"
+ARM GAS  /tmp/ccmCDbei.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ftoa.c
+     /tmp/ccmCDbei.s:16     .text.write_char:0000000000000000 $t
+     /tmp/ccmCDbei.s:23     .text.write_char:0000000000000000 write_char
+     /tmp/ccmCDbei.s:49     .text.write_real_signal:0000000000000000 $t
+     /tmp/ccmCDbei.s:56     .text.write_real_signal:0000000000000000 write_real_signal
+     /tmp/ccmCDbei.s:100    .text.write_natural_with_dot:0000000000000000 $t
+     /tmp/ccmCDbei.s:107    .text.write_natural_with_dot:0000000000000000 write_natural_with_dot
+     /tmp/ccmCDbei.s:194    .text.write_natural_with_dot:0000000000000054 $d
+     /tmp/ccmCDbei.s:203    .text.write_real:0000000000000000 $t
+     /tmp/ccmCDbei.s:210    .text.write_real:0000000000000000 write_real
+     /tmp/ccmCDbei.s:297    .text.write_real:000000000000005c $d
+     /tmp/ccmCDbei.s:302    .text.ftoa:0000000000000000 $t
+     /tmp/ccmCDbei.s:309    .text.ftoa:0000000000000000 ftoa
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_fcmplt
+__aeabi_f2uiz
+__aeabi_ui2f
+__aeabi_fmul
+__aeabi_fcmpeq

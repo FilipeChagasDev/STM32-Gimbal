@@ -28,7 +28,8 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include <stm32f1xx_hal.h>
+#include "stm32f1xx_hal.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stm32f1xx_hal_i2c.h>
@@ -59,9 +60,46 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
+// System
+void init_system();
+void error_alert(char *msg);
+
+// Servomotors
+void init_servomotors();
+void init_servomotors_motion();
+void servo_update();
+
+// Sensor
+void init_position_sensor();
+void test_sensor();
+void update_position_sensor();
+void sensor_calc_position(float *pitch, float *roll);
+
+// Smoothing
+void change_smoothing(size_t value);
+
+// Messaging
+void init_uart_messaging();
+void uart_message_update();
+
+typedef enum {SERVO_ANGLE_PACK, SENSOR_ANGLE_PACK, OFFSET_ANGLE_PACK} angle_pack_target_t;
+typedef enum {FACTOR_VALUE_PACK, SMOOTHING_VALUE_PACK} value_pack_target_t;
+void send_value_pack(value_pack_target_t target, float value);
+void send_angle_pack(angle_pack_target_t target, float pitch, float roll);
+void send_echo_pack(char *msg);
+void send_message_pack(char *msg);
+
+// Mailbox
+void init_mailbox();
+void mailbox_message_received(char *message);
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define UPDATE_LED_Pin GPIO_PIN_0
+#define UPDATE_LED_GPIO_Port GPIOA
+#define ERROR_LED_Pin GPIO_PIN_1
+#define ERROR_LED_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

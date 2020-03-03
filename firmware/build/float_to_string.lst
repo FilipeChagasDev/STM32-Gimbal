@@ -1,0 +1,528 @@
+ARM GAS  /tmp/ccUsZRsn.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"float_to_string.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.float_to_string,"ax",%progbits
+  16              		.align	1
+  17              		.global	float_to_string
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	float_to_string:
+  24              	.LFB0:
+  25              		.file 1 "Src/float_to_string.c"
+   1:Src/float_to_string.c **** #include <float_to_string.h>
+   2:Src/float_to_string.c **** 
+   3:Src/float_to_string.c **** void float_to_string(float Value, char* Buffer)
+   4:Src/float_to_string.c **** {
+  26              		.loc 1 4 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+  31 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 20
+  34              		.cfi_offset 4, -20
+  35              		.cfi_offset 5, -16
+  36              		.cfi_offset 6, -12
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 83B0     		sub	sp, sp, #12
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 32
+  42              	.LVL1:
+   5:Src/float_to_string.c ****      union
+   6:Src/float_to_string.c ****      {
+   7:Src/float_to_string.c ****          float f;
+   8:Src/float_to_string.c ****      
+   9:Src/float_to_string.c ****          struct
+  10:Src/float_to_string.c ****          {
+  11:Src/float_to_string.c ****              unsigned int    mantissa_lo : 16;
+  12:Src/float_to_string.c ****              unsigned int    mantissa_hi : 7;    
+  13:Src/float_to_string.c ****              unsigned int     exponent : 8;
+  14:Src/float_to_string.c ****              unsigned int     sign : 1;
+  15:Src/float_to_string.c ****          };
+  16:Src/float_to_string.c ****      } helper;
+ARM GAS  /tmp/ccUsZRsn.s 			page 2
+
+
+  17:Src/float_to_string.c ****      
+  18:Src/float_to_string.c ****      unsigned long mantissa;
+  19:Src/float_to_string.c ****      signed char exponent;
+  20:Src/float_to_string.c ****      unsigned int int_part;
+  21:Src/float_to_string.c ****      char frac_part[3];
+  22:Src/float_to_string.c ****      int i, count = 0;
+  23:Src/float_to_string.c ****      
+  24:Src/float_to_string.c ****      helper.f = Value;
+  25:Src/float_to_string.c ****      //mantissa is LS 23 bits
+  26:Src/float_to_string.c ****      mantissa = helper.mantissa_lo;
+  43              		.loc 1 26 0
+  44 0004 84B2     		uxth	r4, r0
+  45              	.LVL2:
+  27:Src/float_to_string.c ****      mantissa += ((unsigned long) helper.mantissa_hi << 16);
+  46              		.loc 1 27 0
+  47 0006 00F4FE03 		and	r3, r0, #8323072
+  48 000a 1C44     		add	r4, r4, r3
+  49              	.LVL3:
+  28:Src/float_to_string.c ****      //add the 24th bit to get 1.mmmm^eeee format
+  29:Src/float_to_string.c ****      mantissa += 0x00800000;
+  50              		.loc 1 29 0
+  51 000c 04F50005 		add	r5, r4, #8388608
+  52              	.LVL4:
+  30:Src/float_to_string.c ****      //exponent is biased by 127
+  31:Src/float_to_string.c ****      exponent = (signed char) helper.exponent - 127;
+  53              		.loc 1 31 0
+  54 0010 C0F3C754 		ubfx	r4, r0, #23, #8
+  55 0014 7F3C     		subs	r4, r4, #127
+  56 0016 64B2     		sxtb	r4, r4
+  57              	.LVL5:
+  32:Src/float_to_string.c ****      
+  33:Src/float_to_string.c ****      //too big to shove into 8 chars
+  34:Src/float_to_string.c ****      if (exponent > 18)
+  58              		.loc 1 34 0
+  59 0018 122C     		cmp	r4, #18
+  60 001a 09DD     		ble	.L2
+  35:Src/float_to_string.c ****      {
+  36:Src/float_to_string.c ****          Buffer[0] = 'I';
+  61              		.loc 1 36 0
+  62 001c 4923     		movs	r3, #73
+  63 001e 0B70     		strb	r3, [r1]
+  37:Src/float_to_string.c ****          Buffer[1] = 'n';
+  64              		.loc 1 37 0
+  65 0020 6E23     		movs	r3, #110
+  66 0022 4B70     		strb	r3, [r1, #1]
+  38:Src/float_to_string.c ****          Buffer[2] = 'f';
+  67              		.loc 1 38 0
+  68 0024 6623     		movs	r3, #102
+  69 0026 8B70     		strb	r3, [r1, #2]
+  39:Src/float_to_string.c ****          Buffer[3] = '\0';
+  70              		.loc 1 39 0
+  71 0028 0023     		movs	r3, #0
+  72 002a CB70     		strb	r3, [r1, #3]
+  73              	.LVL6:
+  74              	.L1:
+  40:Src/float_to_string.c ****          return;
+  41:Src/float_to_string.c ****      }
+ARM GAS  /tmp/ccUsZRsn.s 			page 3
+
+
+  42:Src/float_to_string.c ****      
+  43:Src/float_to_string.c ****      //too small to resolve (resolution of 1/8)
+  44:Src/float_to_string.c ****      if (exponent < -3)
+  45:Src/float_to_string.c ****      {
+  46:Src/float_to_string.c ****          Buffer[0] = '0';
+  47:Src/float_to_string.c ****          Buffer[1] = '\0';
+  48:Src/float_to_string.c ****          return;
+  49:Src/float_to_string.c ****      }
+  50:Src/float_to_string.c ****      
+  51:Src/float_to_string.c ****      count = 0;
+  52:Src/float_to_string.c ****      
+  53:Src/float_to_string.c ****      //add negative sign (if applicable)
+  54:Src/float_to_string.c ****      if (helper.sign)
+  55:Src/float_to_string.c ****      {
+  56:Src/float_to_string.c ****          Buffer[0] = '-';
+  57:Src/float_to_string.c ****          count++;
+  58:Src/float_to_string.c ****      }
+  59:Src/float_to_string.c ****      
+  60:Src/float_to_string.c ****      //get the integer part
+  61:Src/float_to_string.c ****      int_part = mantissa >> (23 - exponent);    
+  62:Src/float_to_string.c ****      //convert to string
+  63:Src/float_to_string.c ****      itoa(int_part, &Buffer[count], 10);
+  64:Src/float_to_string.c ****      
+  65:Src/float_to_string.c ****      //find the end of the integer
+  66:Src/float_to_string.c ****      for (i = 0; i < 8; i++)
+  67:Src/float_to_string.c ****          if (Buffer[i] == '\0')
+  68:Src/float_to_string.c ****          {
+  69:Src/float_to_string.c ****              count = i;
+  70:Src/float_to_string.c ****              break;
+  71:Src/float_to_string.c ****          }        
+  72:Src/float_to_string.c ****  
+  73:Src/float_to_string.c ****      //not enough room in the buffer for the frac part    
+  74:Src/float_to_string.c ****      if (count > 5)
+  75:Src/float_to_string.c ****          return;
+  76:Src/float_to_string.c ****      
+  77:Src/float_to_string.c ****      //add the decimal point    
+  78:Src/float_to_string.c ****      Buffer[count++] = '.';
+  79:Src/float_to_string.c ****      
+  80:Src/float_to_string.c ****      //use switch to resolve the fractional part
+  81:Src/float_to_string.c ****      switch (0x7 & (mantissa  >> (20 - exponent)))
+  82:Src/float_to_string.c ****      {
+  83:Src/float_to_string.c ****          case 0:
+  84:Src/float_to_string.c ****              frac_part[0] = '0';
+  85:Src/float_to_string.c ****              frac_part[1] = '0';
+  86:Src/float_to_string.c ****              frac_part[2] = '0';
+  87:Src/float_to_string.c ****              break;
+  88:Src/float_to_string.c ****          case 1:
+  89:Src/float_to_string.c ****              frac_part[0] = '1';
+  90:Src/float_to_string.c ****              frac_part[1] = '2';
+  91:Src/float_to_string.c ****              frac_part[2] = '5';            
+  92:Src/float_to_string.c ****              break;
+  93:Src/float_to_string.c ****          case 2:
+  94:Src/float_to_string.c ****              frac_part[0] = '2';
+  95:Src/float_to_string.c ****              frac_part[1] = '5';
+  96:Src/float_to_string.c ****              frac_part[2] = '0';            
+  97:Src/float_to_string.c ****              break;
+  98:Src/float_to_string.c ****          case 3:
+ARM GAS  /tmp/ccUsZRsn.s 			page 4
+
+
+  99:Src/float_to_string.c ****              frac_part[0] = '3';
+ 100:Src/float_to_string.c ****              frac_part[1] = '7';
+ 101:Src/float_to_string.c ****              frac_part[2] = '5';            
+ 102:Src/float_to_string.c ****              break;
+ 103:Src/float_to_string.c ****          case 4:
+ 104:Src/float_to_string.c ****              frac_part[0] = '5';
+ 105:Src/float_to_string.c ****              frac_part[1] = '0';
+ 106:Src/float_to_string.c ****              frac_part[2] = '0';            
+ 107:Src/float_to_string.c ****              break;
+ 108:Src/float_to_string.c ****          case 5:
+ 109:Src/float_to_string.c ****              frac_part[0] = '6';
+ 110:Src/float_to_string.c ****              frac_part[1] = '2';
+ 111:Src/float_to_string.c ****              frac_part[2] = '5';            
+ 112:Src/float_to_string.c ****              break;
+ 113:Src/float_to_string.c ****          case 6:
+ 114:Src/float_to_string.c ****              frac_part[0] = '7';
+ 115:Src/float_to_string.c ****              frac_part[1] = '5';
+ 116:Src/float_to_string.c ****              frac_part[2] = '0';            
+ 117:Src/float_to_string.c ****              break;
+ 118:Src/float_to_string.c ****          case 7:
+ 119:Src/float_to_string.c ****              frac_part[0] = '8';
+ 120:Src/float_to_string.c ****              frac_part[1] = '7';
+ 121:Src/float_to_string.c ****              frac_part[2] = '5';                    
+ 122:Src/float_to_string.c ****              break;
+ 123:Src/float_to_string.c ****      }
+ 124:Src/float_to_string.c ****      
+ 125:Src/float_to_string.c ****      //add the fractional part to the output string
+ 126:Src/float_to_string.c ****      for (i = 0; i < 3; i++)
+ 127:Src/float_to_string.c ****          if (count < 7)
+ 128:Src/float_to_string.c ****              Buffer[count++] = frac_part[i];
+ 129:Src/float_to_string.c ****      
+ 130:Src/float_to_string.c ****      //make sure the output is terminated
+ 131:Src/float_to_string.c ****      Buffer[count] = '\0';
+ 132:Src/float_to_string.c **** }
+  75              		.loc 1 132 0
+  76 002c 03B0     		add	sp, sp, #12
+  77              	.LCFI2:
+  78              		.cfi_remember_state
+  79              		.cfi_def_cfa_offset 20
+  80              		@ sp needed
+  81 002e F0BD     		pop	{r4, r5, r6, r7, pc}
+  82              	.LVL7:
+  83              	.L2:
+  84              	.LCFI3:
+  85              		.cfi_restore_state
+  44:Src/float_to_string.c ****      {
+  86              		.loc 1 44 0
+  87 0030 14F1030F 		cmn	r4, #3
+  88 0034 04DA     		bge	.L4
+  46:Src/float_to_string.c ****          Buffer[1] = '\0';
+  89              		.loc 1 46 0
+  90 0036 3023     		movs	r3, #48
+  91 0038 0B70     		strb	r3, [r1]
+  47:Src/float_to_string.c ****          return;
+  92              		.loc 1 47 0
+  93 003a 0023     		movs	r3, #0
+  94 003c 4B70     		strb	r3, [r1, #1]
+ARM GAS  /tmp/ccUsZRsn.s 			page 5
+
+
+  48:Src/float_to_string.c ****      }
+  95              		.loc 1 48 0
+  96 003e F5E7     		b	.L1
+  97              	.L4:
+  54:Src/float_to_string.c ****      {
+  98              		.loc 1 54 0
+  99 0040 0028     		cmp	r0, #0
+ 100 0042 10DB     		blt	.L26
+  51:Src/float_to_string.c ****      
+ 101              		.loc 1 51 0
+ 102 0044 0027     		movs	r7, #0
+ 103              	.LVL8:
+ 104              	.L5:
+ 105 0046 0E46     		mov	r6, r1
+ 106              	.LVL9:
+  61:Src/float_to_string.c ****      //convert to string
+ 107              		.loc 1 61 0
+ 108 0048 C4F11700 		rsb	r0, r4, #23
+ 109              	.LVL10:
+  63:Src/float_to_string.c ****      
+ 110              		.loc 1 63 0
+ 111 004c 0A22     		movs	r2, #10
+ 112 004e 3944     		add	r1, r1, r7
+ 113              	.LVL11:
+ 114 0050 25FA00F0 		lsr	r0, r5, r0
+ 115 0054 FFF7FEFF 		bl	itoa
+ 116              	.LVL12:
+  66:Src/float_to_string.c ****          if (Buffer[i] == '\0')
+ 117              		.loc 1 66 0
+ 118 0058 0023     		movs	r3, #0
+ 119              	.LVL13:
+ 120              	.L6:
+  66:Src/float_to_string.c ****          if (Buffer[i] == '\0')
+ 121              		.loc 1 66 0 is_stmt 0 discriminator 1
+ 122 005a 072B     		cmp	r3, #7
+ 123 005c 08DC     		bgt	.L7
+  67:Src/float_to_string.c ****          {
+ 124              		.loc 1 67 0 is_stmt 1
+ 125 005e F25C     		ldrb	r2, [r6, r3]	@ zero_extendqisi2
+ 126 0060 2AB1     		cbz	r2, .L24
+  66:Src/float_to_string.c ****          if (Buffer[i] == '\0')
+ 127              		.loc 1 66 0 discriminator 2
+ 128 0062 0133     		adds	r3, r3, #1
+ 129              	.LVL14:
+ 130 0064 F9E7     		b	.L6
+ 131              	.LVL15:
+ 132              	.L26:
+  56:Src/float_to_string.c ****          count++;
+ 133              		.loc 1 56 0
+ 134 0066 2D23     		movs	r3, #45
+ 135 0068 0B70     		strb	r3, [r1]
+ 136              	.LVL16:
+  57:Src/float_to_string.c ****      }
+ 137              		.loc 1 57 0
+ 138 006a 0127     		movs	r7, #1
+ 139 006c EBE7     		b	.L5
+ 140              	.LVL17:
+ARM GAS  /tmp/ccUsZRsn.s 			page 6
+
+
+ 141              	.L24:
+  69:Src/float_to_string.c ****              break;
+ 142              		.loc 1 69 0
+ 143 006e 1F46     		mov	r7, r3
+ 144              	.LVL18:
+ 145              	.L7:
+  74:Src/float_to_string.c ****          return;
+ 146              		.loc 1 74 0
+ 147 0070 052F     		cmp	r7, #5
+ 148 0072 DBDC     		bgt	.L1
+  78:Src/float_to_string.c ****      
+ 149              		.loc 1 78 0
+ 150 0074 7A1C     		adds	r2, r7, #1
+ 151              	.LVL19:
+ 152 0076 2E23     		movs	r3, #46
+ 153              	.LVL20:
+ 154 0078 F355     		strb	r3, [r6, r7]
+  81:Src/float_to_string.c ****      {
+ 155              		.loc 1 81 0
+ 156 007a C4F11403 		rsb	r3, r4, #20
+ 157 007e 25FA03F4 		lsr	r4, r5, r3
+ 158              	.LVL21:
+ 159 0082 04F00703 		and	r3, r4, #7
+ 160 0086 072B     		cmp	r3, #7
+ 161 0088 0CD8     		bhi	.L9
+ 162 008a DFE803F0 		tbb	[pc, r3]
+ 163              	.L11:
+ 164 008e 04       		.byte	(.L10-.L11)/2
+ 165 008f 0D       		.byte	(.L12-.L11)/2
+ 166 0090 17       		.byte	(.L13-.L11)/2
+ 167 0091 21       		.byte	(.L14-.L11)/2
+ 168 0092 2B       		.byte	(.L15-.L11)/2
+ 169 0093 34       		.byte	(.L16-.L11)/2
+ 170 0094 3E       		.byte	(.L17-.L11)/2
+ 171 0095 48       		.byte	(.L18-.L11)/2
+ 172              		.p2align 1
+ 173              	.L10:
+  84:Src/float_to_string.c ****              frac_part[1] = '0';
+ 174              		.loc 1 84 0
+ 175 0096 3023     		movs	r3, #48
+ 176 0098 8DF80430 		strb	r3, [sp, #4]
+  85:Src/float_to_string.c ****              frac_part[2] = '0';
+ 177              		.loc 1 85 0
+ 178 009c 8DF80530 		strb	r3, [sp, #5]
+  86:Src/float_to_string.c ****              break;
+ 179              		.loc 1 86 0
+ 180 00a0 8DF80630 		strb	r3, [sp, #6]
+ 181              	.L9:
+ 128:Src/float_to_string.c ****      
+ 182              		.loc 1 128 0 discriminator 1
+ 183 00a4 0023     		movs	r3, #0
+ 184 00a6 45E0     		b	.L19
+ 185              	.L12:
+  89:Src/float_to_string.c ****              frac_part[1] = '2';
+ 186              		.loc 1 89 0
+ 187 00a8 3123     		movs	r3, #49
+ 188 00aa 8DF80430 		strb	r3, [sp, #4]
+ARM GAS  /tmp/ccUsZRsn.s 			page 7
+
+
+  90:Src/float_to_string.c ****              frac_part[2] = '5';            
+ 189              		.loc 1 90 0
+ 190 00ae 3223     		movs	r3, #50
+ 191 00b0 8DF80530 		strb	r3, [sp, #5]
+  91:Src/float_to_string.c ****              break;
+ 192              		.loc 1 91 0
+ 193 00b4 3523     		movs	r3, #53
+ 194 00b6 8DF80630 		strb	r3, [sp, #6]
+  92:Src/float_to_string.c ****          case 2:
+ 195              		.loc 1 92 0
+ 196 00ba F3E7     		b	.L9
+ 197              	.L13:
+  94:Src/float_to_string.c ****              frac_part[1] = '5';
+ 198              		.loc 1 94 0
+ 199 00bc 3223     		movs	r3, #50
+ 200 00be 8DF80430 		strb	r3, [sp, #4]
+  95:Src/float_to_string.c ****              frac_part[2] = '0';            
+ 201              		.loc 1 95 0
+ 202 00c2 3523     		movs	r3, #53
+ 203 00c4 8DF80530 		strb	r3, [sp, #5]
+  96:Src/float_to_string.c ****              break;
+ 204              		.loc 1 96 0
+ 205 00c8 3023     		movs	r3, #48
+ 206 00ca 8DF80630 		strb	r3, [sp, #6]
+  97:Src/float_to_string.c ****          case 3:
+ 207              		.loc 1 97 0
+ 208 00ce E9E7     		b	.L9
+ 209              	.L14:
+  99:Src/float_to_string.c ****              frac_part[1] = '7';
+ 210              		.loc 1 99 0
+ 211 00d0 3323     		movs	r3, #51
+ 212 00d2 8DF80430 		strb	r3, [sp, #4]
+ 100:Src/float_to_string.c ****              frac_part[2] = '5';            
+ 213              		.loc 1 100 0
+ 214 00d6 3723     		movs	r3, #55
+ 215 00d8 8DF80530 		strb	r3, [sp, #5]
+ 101:Src/float_to_string.c ****              break;
+ 216              		.loc 1 101 0
+ 217 00dc 3523     		movs	r3, #53
+ 218 00de 8DF80630 		strb	r3, [sp, #6]
+ 102:Src/float_to_string.c ****          case 4:
+ 219              		.loc 1 102 0
+ 220 00e2 DFE7     		b	.L9
+ 221              	.L15:
+ 104:Src/float_to_string.c ****              frac_part[1] = '0';
+ 222              		.loc 1 104 0
+ 223 00e4 3523     		movs	r3, #53
+ 224 00e6 8DF80430 		strb	r3, [sp, #4]
+ 105:Src/float_to_string.c ****              frac_part[2] = '0';            
+ 225              		.loc 1 105 0
+ 226 00ea 3023     		movs	r3, #48
+ 227 00ec 8DF80530 		strb	r3, [sp, #5]
+ 106:Src/float_to_string.c ****              break;
+ 228              		.loc 1 106 0
+ 229 00f0 8DF80630 		strb	r3, [sp, #6]
+ 107:Src/float_to_string.c ****          case 5:
+ 230              		.loc 1 107 0
+ARM GAS  /tmp/ccUsZRsn.s 			page 8
+
+
+ 231 00f4 D6E7     		b	.L9
+ 232              	.L16:
+ 109:Src/float_to_string.c ****              frac_part[1] = '2';
+ 233              		.loc 1 109 0
+ 234 00f6 3623     		movs	r3, #54
+ 235 00f8 8DF80430 		strb	r3, [sp, #4]
+ 110:Src/float_to_string.c ****              frac_part[2] = '5';            
+ 236              		.loc 1 110 0
+ 237 00fc 3223     		movs	r3, #50
+ 238 00fe 8DF80530 		strb	r3, [sp, #5]
+ 111:Src/float_to_string.c ****              break;
+ 239              		.loc 1 111 0
+ 240 0102 3523     		movs	r3, #53
+ 241 0104 8DF80630 		strb	r3, [sp, #6]
+ 112:Src/float_to_string.c ****          case 6:
+ 242              		.loc 1 112 0
+ 243 0108 CCE7     		b	.L9
+ 244              	.L17:
+ 114:Src/float_to_string.c ****              frac_part[1] = '5';
+ 245              		.loc 1 114 0
+ 246 010a 3723     		movs	r3, #55
+ 247 010c 8DF80430 		strb	r3, [sp, #4]
+ 115:Src/float_to_string.c ****              frac_part[2] = '0';            
+ 248              		.loc 1 115 0
+ 249 0110 3523     		movs	r3, #53
+ 250 0112 8DF80530 		strb	r3, [sp, #5]
+ 116:Src/float_to_string.c ****              break;
+ 251              		.loc 1 116 0
+ 252 0116 3023     		movs	r3, #48
+ 253 0118 8DF80630 		strb	r3, [sp, #6]
+ 117:Src/float_to_string.c ****          case 7:
+ 254              		.loc 1 117 0
+ 255 011c C2E7     		b	.L9
+ 256              	.L18:
+ 119:Src/float_to_string.c ****              frac_part[1] = '7';
+ 257              		.loc 1 119 0
+ 258 011e 3823     		movs	r3, #56
+ 259 0120 8DF80430 		strb	r3, [sp, #4]
+ 120:Src/float_to_string.c ****              frac_part[2] = '5';                    
+ 260              		.loc 1 120 0
+ 261 0124 3723     		movs	r3, #55
+ 262 0126 8DF80530 		strb	r3, [sp, #5]
+ 121:Src/float_to_string.c ****              break;
+ 263              		.loc 1 121 0
+ 264 012a 3523     		movs	r3, #53
+ 265 012c 8DF80630 		strb	r3, [sp, #6]
+ 122:Src/float_to_string.c ****      }
+ 266              		.loc 1 122 0
+ 267 0130 B8E7     		b	.L9
+ 268              	.LVL22:
+ 269              	.L20:
+ 126:Src/float_to_string.c ****          if (count < 7)
+ 270              		.loc 1 126 0 discriminator 2
+ 271 0132 0133     		adds	r3, r3, #1
+ 272              	.LVL23:
+ 273              	.L19:
+ 126:Src/float_to_string.c ****          if (count < 7)
+ARM GAS  /tmp/ccUsZRsn.s 			page 9
+
+
+ 274              		.loc 1 126 0 is_stmt 0 discriminator 1
+ 275 0134 022B     		cmp	r3, #2
+ 276 0136 08DC     		bgt	.L27
+ 127:Src/float_to_string.c ****              Buffer[count++] = frac_part[i];
+ 277              		.loc 1 127 0 is_stmt 1
+ 278 0138 062A     		cmp	r2, #6
+ 279 013a FADC     		bgt	.L20
+ 280              	.LVL24:
+ 128:Src/float_to_string.c ****      
+ 281              		.loc 1 128 0
+ 282 013c 02A9     		add	r1, sp, #8
+ 283 013e 1944     		add	r1, r1, r3
+ 284 0140 11F8041C 		ldrb	r1, [r1, #-4]	@ zero_extendqisi2
+ 285 0144 B154     		strb	r1, [r6, r2]
+ 286 0146 0132     		adds	r2, r2, #1
+ 287              	.LVL25:
+ 288 0148 F3E7     		b	.L20
+ 289              	.L27:
+ 131:Src/float_to_string.c **** }
+ 290              		.loc 1 131 0
+ 291 014a 0023     		movs	r3, #0
+ 292              	.LVL26:
+ 293 014c B354     		strb	r3, [r6, r2]
+ 294 014e 6DE7     		b	.L1
+ 295              		.cfi_endproc
+ 296              	.LFE0:
+ 298              		.text
+ 299              	.Letext0:
+ 300              		.file 2 "/usr/include/newlib/sys/lock.h"
+ 301              		.file 3 "/usr/include/newlib/sys/_types.h"
+ 302              		.file 4 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 303              		.file 5 "/usr/include/newlib/sys/reent.h"
+ARM GAS  /tmp/ccUsZRsn.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 float_to_string.c
+     /tmp/ccUsZRsn.s:16     .text.float_to_string:0000000000000000 $t
+     /tmp/ccUsZRsn.s:23     .text.float_to_string:0000000000000000 float_to_string
+     /tmp/ccUsZRsn.s:164    .text.float_to_string:000000000000008e $d
+     /tmp/ccUsZRsn.s:172    .text.float_to_string:0000000000000096 $t
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+itoa

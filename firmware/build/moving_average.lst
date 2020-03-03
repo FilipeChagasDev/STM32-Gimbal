@@ -1,0 +1,1040 @@
+ARM GAS  /tmp/cciVROCd.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"moving_average.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.global	__aeabi_ui2f
+  16              		.global	__aeabi_fdiv
+  17              		.section	.text.maf_simple_average_kern,"ax",%progbits
+  18              		.align	1
+  19              		.global	maf_simple_average_kern
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu softvfp
+  25              	maf_simple_average_kern:
+  26              	.LFB5:
+  27              		.file 1 "signals/c/moving-average/moving_average.c"
+   1:signals/c/moving-average/moving_average.c **** /*
+   2:signals/c/moving-average/moving_average.c ****  * MIT License
+   3:signals/c/moving-average/moving_average.c ****  * 
+   4:signals/c/moving-average/moving_average.c ****  * Copyright (c) 2020 Filipe Chagas
+   5:signals/c/moving-average/moving_average.c ****  * 
+   6:signals/c/moving-average/moving_average.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy
+   7:signals/c/moving-average/moving_average.c ****  * of this software and associated documentation files (the "Software"), to deal
+   8:signals/c/moving-average/moving_average.c ****  * in the Software without restriction, including without limitation the rights
+   9:signals/c/moving-average/moving_average.c ****  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  10:signals/c/moving-average/moving_average.c ****  * copies of the Software, and to permit persons to whom the Software is
+  11:signals/c/moving-average/moving_average.c ****  * furnished to do so, subject to the following conditions:
+  12:signals/c/moving-average/moving_average.c ****  * 
+  13:signals/c/moving-average/moving_average.c ****  * The above copyright notice and this permission notice shall be included in all
+  14:signals/c/moving-average/moving_average.c ****  * copies or substantial portions of the Software.
+  15:signals/c/moving-average/moving_average.c ****  * 
+  16:signals/c/moving-average/moving_average.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  17:signals/c/moving-average/moving_average.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  18:signals/c/moving-average/moving_average.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  19:signals/c/moving-average/moving_average.c ****  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  20:signals/c/moving-average/moving_average.c ****  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  21:signals/c/moving-average/moving_average.c ****  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  22:signals/c/moving-average/moving_average.c ****  * SOFTWARE.
+  23:signals/c/moving-average/moving_average.c ****  */
+  24:signals/c/moving-average/moving_average.c **** 
+  25:signals/c/moving-average/moving_average.c **** /**
+  26:signals/c/moving-average/moving_average.c ****  * @file moving_average.c
+  27:signals/c/moving-average/moving_average.c ****  * @author Filipe Chagas
+  28:signals/c/moving-average/moving_average.c ****  * @date 28/02/2020 (last revision on 28/02/2020)
+  29:signals/c/moving-average/moving_average.c ****  * @brief Implementation of a moving average filter 
+  30:signals/c/moving-average/moving_average.c ****  *
+  31:signals/c/moving-average/moving_average.c ****  * @see https://github.com/FilipeChagasDev/signals
+ARM GAS  /tmp/cciVROCd.s 			page 2
+
+
+  32:signals/c/moving-average/moving_average.c ****  */
+  33:signals/c/moving-average/moving_average.c **** 
+  34:signals/c/moving-average/moving_average.c **** #include "moving_average.h"
+  35:signals/c/moving-average/moving_average.c **** 
+  36:signals/c/moving-average/moving_average.c **** #define RETURN_ERROR 0
+  37:signals/c/moving-average/moving_average.c **** #define RETURN_SUCCESS 1
+  38:signals/c/moving-average/moving_average.c **** 
+  39:signals/c/moving-average/moving_average.c **** uint8_t init_maf(maf_t *instance, size_t length)
+  40:signals/c/moving-average/moving_average.c **** {
+  41:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+  42:signals/c/moving-average/moving_average.c **** 
+  43:signals/c/moving-average/moving_average.c ****     /* -- Instance mode --*/
+  44:signals/c/moving-average/moving_average.c ****     instance->instance_mode = MAF_INSTANCE_STATIC;
+  45:signals/c/moving-average/moving_average.c **** 
+  46:signals/c/moving-average/moving_average.c ****     /* -- Buffers -- */
+  47:signals/c/moving-average/moving_average.c ****     instance->buffer_length = length;
+  48:signals/c/moving-average/moving_average.c ****     instance->buffer0 = (float*)malloc(sizeof(float)*length);
+  49:signals/c/moving-average/moving_average.c ****     
+  50:signals/c/moving-average/moving_average.c ****     if(instance->buffer0 == NULL)
+  51:signals/c/moving-average/moving_average.c ****     {
+  52:signals/c/moving-average/moving_average.c ****         instance->instance_mode = MAF_INSTANCE_NONE;
+  53:signals/c/moving-average/moving_average.c ****         return RETURN_ERROR;
+  54:signals/c/moving-average/moving_average.c ****     } 
+  55:signals/c/moving-average/moving_average.c **** 
+  56:signals/c/moving-average/moving_average.c ****     instance->buffer1 = (float*)malloc(sizeof(float)*length);
+  57:signals/c/moving-average/moving_average.c **** 
+  58:signals/c/moving-average/moving_average.c ****     if(instance->buffer1 == NULL)
+  59:signals/c/moving-average/moving_average.c ****     {
+  60:signals/c/moving-average/moving_average.c ****         instance->instance_mode = MAF_INSTANCE_NONE;
+  61:signals/c/moving-average/moving_average.c ****         free(instance->buffer0);
+  62:signals/c/moving-average/moving_average.c ****         return RETURN_ERROR;
+  63:signals/c/moving-average/moving_average.c ****     }
+  64:signals/c/moving-average/moving_average.c **** 
+  65:signals/c/moving-average/moving_average.c ****     instance->current_buffer = MAF_BUFFER_0;
+  66:signals/c/moving-average/moving_average.c **** 
+  67:signals/c/moving-average/moving_average.c ****     /* -- Kernel function callback -- */
+  68:signals/c/moving-average/moving_average.c ****     instance->kern_function = maf_simple_average_kern;
+  69:signals/c/moving-average/moving_average.c **** 
+  70:signals/c/moving-average/moving_average.c ****     /* -- Kernel function params vector -- */
+  71:signals/c/moving-average/moving_average.c ****     instance->kern_params = NULL;
+  72:signals/c/moving-average/moving_average.c ****     instance->kern_params_length = 0;
+  73:signals/c/moving-average/moving_average.c **** 
+  74:signals/c/moving-average/moving_average.c ****     maf_fill(instance, 0); //Fill buffer with 0
+  75:signals/c/moving-average/moving_average.c **** 
+  76:signals/c/moving-average/moving_average.c ****     return RETURN_SUCCESS;
+  77:signals/c/moving-average/moving_average.c **** }
+  78:signals/c/moving-average/moving_average.c **** 
+  79:signals/c/moving-average/moving_average.c **** maf_t *create_maf(size_t length)
+  80:signals/c/moving-average/moving_average.c **** {
+  81:signals/c/moving-average/moving_average.c ****     maf_t *instance = (maf_t*)malloc(sizeof(maf_t));
+  82:signals/c/moving-average/moving_average.c ****     
+  83:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return NULL; //ERROR
+  84:signals/c/moving-average/moving_average.c **** 
+  85:signals/c/moving-average/moving_average.c ****     /* -- Instance mode --*/
+  86:signals/c/moving-average/moving_average.c ****     instance->instance_mode = MAF_INSTANCE_DYNAMIC;
+  87:signals/c/moving-average/moving_average.c **** 
+  88:signals/c/moving-average/moving_average.c ****     /* -- Buffers -- */
+ARM GAS  /tmp/cciVROCd.s 			page 3
+
+
+  89:signals/c/moving-average/moving_average.c ****     instance->buffer_length = length;
+  90:signals/c/moving-average/moving_average.c ****     instance->buffer0 = (float*)malloc(sizeof(float)*length);
+  91:signals/c/moving-average/moving_average.c ****     
+  92:signals/c/moving-average/moving_average.c ****     if(instance->buffer0 == NULL) //ERROR
+  93:signals/c/moving-average/moving_average.c ****     {
+  94:signals/c/moving-average/moving_average.c ****         free(instance);
+  95:signals/c/moving-average/moving_average.c ****         return NULL;
+  96:signals/c/moving-average/moving_average.c ****     }
+  97:signals/c/moving-average/moving_average.c **** 
+  98:signals/c/moving-average/moving_average.c ****     instance->buffer1 = (float*)malloc(sizeof(float)*length);
+  99:signals/c/moving-average/moving_average.c **** 
+ 100:signals/c/moving-average/moving_average.c ****     if(instance->buffer1 == NULL) //ERROR
+ 101:signals/c/moving-average/moving_average.c ****     {
+ 102:signals/c/moving-average/moving_average.c ****         free(instance->buffer0);
+ 103:signals/c/moving-average/moving_average.c ****         free(instance);
+ 104:signals/c/moving-average/moving_average.c ****         return NULL;
+ 105:signals/c/moving-average/moving_average.c ****     }
+ 106:signals/c/moving-average/moving_average.c **** 
+ 107:signals/c/moving-average/moving_average.c ****     instance->current_buffer = MAF_BUFFER_0;
+ 108:signals/c/moving-average/moving_average.c **** 
+ 109:signals/c/moving-average/moving_average.c ****     /* -- Kernel function callback -- */
+ 110:signals/c/moving-average/moving_average.c ****     instance->kern_function = maf_simple_average_kern;
+ 111:signals/c/moving-average/moving_average.c **** 
+ 112:signals/c/moving-average/moving_average.c ****     /* -- Kernel function params vector -- */
+ 113:signals/c/moving-average/moving_average.c ****     instance->kern_params = NULL;
+ 114:signals/c/moving-average/moving_average.c ****     instance->kern_params_length = 0;
+ 115:signals/c/moving-average/moving_average.c **** 
+ 116:signals/c/moving-average/moving_average.c ****     maf_fill(instance, 0); //Fill buffer with 0
+ 117:signals/c/moving-average/moving_average.c **** 
+ 118:signals/c/moving-average/moving_average.c ****     return instance;
+ 119:signals/c/moving-average/moving_average.c **** }
+ 120:signals/c/moving-average/moving_average.c **** 
+ 121:signals/c/moving-average/moving_average.c **** uint8_t maf_fill(maf_t *instance, float value)
+ 122:signals/c/moving-average/moving_average.c **** {
+ 123:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 124:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return RETURN_ERROR;
+ 125:signals/c/moving-average/moving_average.c **** 
+ 126:signals/c/moving-average/moving_average.c ****     float *buffer = instance->current_buffer == MAF_BUFFER_0 ? instance->buffer0 : instance->buffer
+ 127:signals/c/moving-average/moving_average.c **** 
+ 128:signals/c/moving-average/moving_average.c ****     for(size_t i = 0; i < instance->buffer_length; i++)
+ 129:signals/c/moving-average/moving_average.c ****     {
+ 130:signals/c/moving-average/moving_average.c ****         buffer[i] = value;
+ 131:signals/c/moving-average/moving_average.c ****     }
+ 132:signals/c/moving-average/moving_average.c **** 
+ 133:signals/c/moving-average/moving_average.c ****     return RETURN_SUCCESS;
+ 134:signals/c/moving-average/moving_average.c **** }
+ 135:signals/c/moving-average/moving_average.c **** 
+ 136:signals/c/moving-average/moving_average.c **** float maf_filter(maf_t *instance, float input)
+ 137:signals/c/moving-average/moving_average.c **** {
+ 138:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return 0;
+ 139:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return 0;
+ 140:signals/c/moving-average/moving_average.c **** 
+ 141:signals/c/moving-average/moving_average.c ****     float *buffer;
+ 142:signals/c/moving-average/moving_average.c **** 
+ 143:signals/c/moving-average/moving_average.c ****     if(instance->current_buffer == MAF_BUFFER_0)
+ 144:signals/c/moving-average/moving_average.c ****     {
+ 145:signals/c/moving-average/moving_average.c ****         /* -- Toggle buffers -- */
+ARM GAS  /tmp/cciVROCd.s 			page 4
+
+
+ 146:signals/c/moving-average/moving_average.c ****         instance->current_buffer = MAF_BUFFER_1;
+ 147:signals/c/moving-average/moving_average.c ****         buffer = instance->buffer1;
+ 148:signals/c/moving-average/moving_average.c **** 
+ 149:signals/c/moving-average/moving_average.c ****         /* -- Moves samples one index forward from buffer0 to buffer1 -- */    
+ 150:signals/c/moving-average/moving_average.c ****         for(size_t i = 0; i < instance->buffer_length-1; i++)
+ 151:signals/c/moving-average/moving_average.c ****         {
+ 152:signals/c/moving-average/moving_average.c ****             instance->buffer1[i+1] = instance->buffer0[i]; 
+ 153:signals/c/moving-average/moving_average.c ****         }
+ 154:signals/c/moving-average/moving_average.c ****     }
+ 155:signals/c/moving-average/moving_average.c ****     else //MAF_BUFFER_1
+ 156:signals/c/moving-average/moving_average.c ****     {
+ 157:signals/c/moving-average/moving_average.c ****         /* -- Toggle buffers -- */
+ 158:signals/c/moving-average/moving_average.c ****         instance->current_buffer = MAF_BUFFER_0;
+ 159:signals/c/moving-average/moving_average.c ****         buffer = instance->buffer0;
+ 160:signals/c/moving-average/moving_average.c **** 
+ 161:signals/c/moving-average/moving_average.c ****         /* -- Moves samples one index forward from buffer1 to buffer0 -- */    
+ 162:signals/c/moving-average/moving_average.c ****         for(size_t i = 0; i < instance->buffer_length-1; i++)
+ 163:signals/c/moving-average/moving_average.c ****         {
+ 164:signals/c/moving-average/moving_average.c ****             instance->buffer0[i+1] = instance->buffer1[i]; 
+ 165:signals/c/moving-average/moving_average.c ****         }
+ 166:signals/c/moving-average/moving_average.c ****     }
+ 167:signals/c/moving-average/moving_average.c **** 
+ 168:signals/c/moving-average/moving_average.c ****     /* -- Average calc -- */
+ 169:signals/c/moving-average/moving_average.c ****     float sum = 0;
+ 170:signals/c/moving-average/moving_average.c ****     buffer[0] = input;
+ 171:signals/c/moving-average/moving_average.c ****     for(size_t i = 0; i < instance->buffer_length; i++)
+ 172:signals/c/moving-average/moving_average.c ****     {
+ 173:signals/c/moving-average/moving_average.c ****         sum += buffer[i] * instance->kern_function(instance, i);
+ 174:signals/c/moving-average/moving_average.c ****     }
+ 175:signals/c/moving-average/moving_average.c **** 
+ 176:signals/c/moving-average/moving_average.c ****     return sum;
+ 177:signals/c/moving-average/moving_average.c **** }
+ 178:signals/c/moving-average/moving_average.c **** 
+ 179:signals/c/moving-average/moving_average.c **** uint8_t delete_maf(maf_t *instance)
+ 180:signals/c/moving-average/moving_average.c **** {
+ 181:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 182:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return RETURN_ERROR;
+ 183:signals/c/moving-average/moving_average.c **** 
+ 184:signals/c/moving-average/moving_average.c ****     instance->instance_mode = MAF_INSTANCE_NONE;
+ 185:signals/c/moving-average/moving_average.c ****     free(instance->buffer0);
+ 186:signals/c/moving-average/moving_average.c ****     free(instance->buffer1);
+ 187:signals/c/moving-average/moving_average.c ****     if(instance->kern_params != NULL) free(instance->kern_params);
+ 188:signals/c/moving-average/moving_average.c **** 
+ 189:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_DYNAMIC)
+ 190:signals/c/moving-average/moving_average.c ****     {
+ 191:signals/c/moving-average/moving_average.c ****         free(instance);
+ 192:signals/c/moving-average/moving_average.c ****     }
+ 193:signals/c/moving-average/moving_average.c **** }
+ 194:signals/c/moving-average/moving_average.c **** 
+ 195:signals/c/moving-average/moving_average.c **** float maf_simple_average_kern(maf_t *instance, size_t index)
+ 196:signals/c/moving-average/moving_average.c **** {
+  28              		.loc 1 196 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 08B5     		push	{r3, lr}
+ARM GAS  /tmp/cciVROCd.s 			page 5
+
+
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+ 197:signals/c/moving-average/moving_average.c ****     return ((float)1) / ((float)instance->buffer_length);
+  38              		.loc 1 197 0
+  39 0002 C068     		ldr	r0, [r0, #12]
+  40              	.LVL1:
+  41 0004 FFF7FEFF 		bl	__aeabi_ui2f
+  42              	.LVL2:
+  43 0008 0146     		mov	r1, r0
+  44 000a 4FF07E50 		mov	r0, #1065353216
+  45 000e FFF7FEFF 		bl	__aeabi_fdiv
+  46              	.LVL3:
+ 198:signals/c/moving-average/moving_average.c **** }
+  47              		.loc 1 198 0
+  48 0012 08BD     		pop	{r3, pc}
+  49              		.cfi_endproc
+  50              	.LFE5:
+  52              		.section	.text.maf_fill,"ax",%progbits
+  53              		.align	1
+  54              		.global	maf_fill
+  55              		.syntax unified
+  56              		.thumb
+  57              		.thumb_func
+  58              		.fpu softvfp
+  60              	maf_fill:
+  61              	.LFB2:
+ 122:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+  62              		.loc 1 122 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+  67              	.LVL4:
+ 123:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return RETURN_ERROR;
+  68              		.loc 1 123 0
+  69 0000 98B1     		cbz	r0, .L9
+ 122:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+  70              		.loc 1 122 0
+  71 0002 10B4     		push	{r4}
+  72              	.LCFI1:
+  73              		.cfi_def_cfa_offset 4
+  74              		.cfi_offset 4, -4
+  75 0004 0446     		mov	r4, r0
+ 124:signals/c/moving-average/moving_average.c **** 
+  76              		.loc 1 124 0
+  77 0006 0078     		ldrb	r0, [r0]	@ zero_extendqisi2
+  78              	.LVL5:
+  79 0008 68B1     		cbz	r0, .L4
+ 126:signals/c/moving-average/moving_average.c **** 
+  80              		.loc 1 126 0
+  81 000a 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+  82 000c 13B9     		cbnz	r3, .L5
+ 126:signals/c/moving-average/moving_average.c **** 
+  83              		.loc 1 126 0 is_stmt 0 discriminator 1
+  84 000e 6068     		ldr	r0, [r4, #4]
+ARM GAS  /tmp/cciVROCd.s 			page 6
+
+
+  85              	.L6:
+  86              	.LVL6:
+  87              	.LBB2:
+ 128:signals/c/moving-average/moving_average.c ****     {
+  88              		.loc 1 128 0 is_stmt 1 discriminator 4
+  89 0010 0023     		movs	r3, #0
+  90 0012 04E0     		b	.L7
+  91              	.LVL7:
+  92              	.L5:
+  93              	.LBE2:
+ 126:signals/c/moving-average/moving_average.c **** 
+  94              		.loc 1 126 0 discriminator 2
+  95 0014 A068     		ldr	r0, [r4, #8]
+  96 0016 FBE7     		b	.L6
+  97              	.LVL8:
+  98              	.L8:
+  99              	.LBB3:
+ 130:signals/c/moving-average/moving_average.c ****     }
+ 100              		.loc 1 130 0 discriminator 3
+ 101 0018 40F82310 		str	r1, [r0, r3, lsl #2]	@ float
+ 128:signals/c/moving-average/moving_average.c ****     {
+ 102              		.loc 1 128 0 discriminator 3
+ 103 001c 0133     		adds	r3, r3, #1
+ 104              	.LVL9:
+ 105              	.L7:
+ 128:signals/c/moving-average/moving_average.c ****     {
+ 106              		.loc 1 128 0 is_stmt 0 discriminator 1
+ 107 001e E268     		ldr	r2, [r4, #12]
+ 108 0020 9342     		cmp	r3, r2
+ 109 0022 F9D3     		bcc	.L8
+ 110              	.LBE3:
+ 133:signals/c/moving-average/moving_average.c **** }
+ 111              		.loc 1 133 0 is_stmt 1
+ 112 0024 0120     		movs	r0, #1
+ 113              	.LVL10:
+ 114              	.L4:
+ 134:signals/c/moving-average/moving_average.c **** 
+ 115              		.loc 1 134 0
+ 116 0026 10BC     		pop	{r4}
+ 117              	.LCFI2:
+ 118              		.cfi_restore 4
+ 119              		.cfi_def_cfa_offset 0
+ 120              	.LVL11:
+ 121 0028 7047     		bx	lr
+ 122              	.LVL12:
+ 123              	.L9:
+ 123:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return RETURN_ERROR;
+ 124              		.loc 1 123 0
+ 125 002a 0020     		movs	r0, #0
+ 126              	.LVL13:
+ 127 002c 7047     		bx	lr
+ 128              		.cfi_endproc
+ 129              	.LFE2:
+ 131              		.section	.text.init_maf,"ax",%progbits
+ 132              		.align	1
+ 133              		.global	init_maf
+ 134              		.syntax unified
+ARM GAS  /tmp/cciVROCd.s 			page 7
+
+
+ 135              		.thumb
+ 136              		.thumb_func
+ 137              		.fpu softvfp
+ 139              	init_maf:
+ 140              	.LFB0:
+  40:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 141              		.loc 1 40 0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              	.LVL14:
+  41:signals/c/moving-average/moving_average.c **** 
+ 146              		.loc 1 41 0
+ 147 0000 30B3     		cbz	r0, .L18
+  40:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 148              		.loc 1 40 0
+ 149 0002 70B5     		push	{r4, r5, r6, lr}
+ 150              	.LCFI3:
+ 151              		.cfi_def_cfa_offset 16
+ 152              		.cfi_offset 4, -16
+ 153              		.cfi_offset 5, -12
+ 154              		.cfi_offset 6, -8
+ 155              		.cfi_offset 14, -4
+ 156 0004 0446     		mov	r4, r0
+  44:signals/c/moving-average/moving_average.c **** 
+ 157              		.loc 1 44 0
+ 158 0006 0123     		movs	r3, #1
+ 159 0008 0370     		strb	r3, [r0]
+  47:signals/c/moving-average/moving_average.c ****     instance->buffer0 = (float*)malloc(sizeof(float)*length);
+ 160              		.loc 1 47 0
+ 161 000a C160     		str	r1, [r0, #12]
+  48:signals/c/moving-average/moving_average.c ****     
+ 162              		.loc 1 48 0
+ 163 000c 8D00     		lsls	r5, r1, #2
+ 164 000e 2846     		mov	r0, r5
+ 165              	.LVL15:
+ 166 0010 FFF7FEFF 		bl	malloc
+ 167              	.LVL16:
+ 168 0014 0646     		mov	r6, r0
+ 169 0016 6060     		str	r0, [r4, #4]
+  50:signals/c/moving-average/moving_average.c ****     {
+ 170              		.loc 1 50 0
+ 171 0018 80B1     		cbz	r0, .L23
+  56:signals/c/moving-average/moving_average.c **** 
+ 172              		.loc 1 56 0
+ 173 001a 2846     		mov	r0, r5
+ 174 001c FFF7FEFF 		bl	malloc
+ 175              	.LVL17:
+ 176 0020 A060     		str	r0, [r4, #8]
+  58:signals/c/moving-average/moving_average.c ****     {
+ 177              		.loc 1 58 0
+ 178 0022 70B1     		cbz	r0, .L24
+  65:signals/c/moving-average/moving_average.c **** 
+ 179              		.loc 1 65 0
+ 180 0024 0023     		movs	r3, #0
+ 181 0026 6370     		strb	r3, [r4, #1]
+  68:signals/c/moving-average/moving_average.c **** 
+ARM GAS  /tmp/cciVROCd.s 			page 8
+
+
+ 182              		.loc 1 68 0
+ 183 0028 0A4A     		ldr	r2, .L25
+ 184 002a 2261     		str	r2, [r4, #16]
+  71:signals/c/moving-average/moving_average.c ****     instance->kern_params_length = 0;
+ 185              		.loc 1 71 0
+ 186 002c 6361     		str	r3, [r4, #20]
+  72:signals/c/moving-average/moving_average.c **** 
+ 187              		.loc 1 72 0
+ 188 002e A361     		str	r3, [r4, #24]
+  74:signals/c/moving-average/moving_average.c **** 
+ 189              		.loc 1 74 0
+ 190 0030 0021     		movs	r1, #0
+ 191 0032 2046     		mov	r0, r4
+ 192 0034 FFF7FEFF 		bl	maf_fill
+ 193              	.LVL18:
+  76:signals/c/moving-average/moving_average.c **** }
+ 194              		.loc 1 76 0
+ 195 0038 0120     		movs	r0, #1
+ 196 003a 70BD     		pop	{r4, r5, r6, pc}
+ 197              	.LVL19:
+ 198              	.L23:
+  52:signals/c/moving-average/moving_average.c ****         return RETURN_ERROR;
+ 199              		.loc 1 52 0
+ 200 003c 0020     		movs	r0, #0
+ 201 003e 2070     		strb	r0, [r4]
+  53:signals/c/moving-average/moving_average.c ****     } 
+ 202              		.loc 1 53 0
+ 203 0040 70BD     		pop	{r4, r5, r6, pc}
+ 204              	.LVL20:
+ 205              	.L24:
+  60:signals/c/moving-average/moving_average.c ****         free(instance->buffer0);
+ 206              		.loc 1 60 0
+ 207 0042 0025     		movs	r5, #0
+ 208 0044 2570     		strb	r5, [r4]
+  61:signals/c/moving-average/moving_average.c ****         return RETURN_ERROR;
+ 209              		.loc 1 61 0
+ 210 0046 3046     		mov	r0, r6
+ 211 0048 FFF7FEFF 		bl	free
+ 212              	.LVL21:
+  62:signals/c/moving-average/moving_average.c ****     }
+ 213              		.loc 1 62 0
+ 214 004c 2846     		mov	r0, r5
+ 215 004e 70BD     		pop	{r4, r5, r6, pc}
+ 216              	.LVL22:
+ 217              	.L18:
+ 218              	.LCFI4:
+ 219              		.cfi_def_cfa_offset 0
+ 220              		.cfi_restore 4
+ 221              		.cfi_restore 5
+ 222              		.cfi_restore 6
+ 223              		.cfi_restore 14
+  41:signals/c/moving-average/moving_average.c **** 
+ 224              		.loc 1 41 0
+ 225 0050 0020     		movs	r0, #0
+ 226              	.LVL23:
+ 227 0052 7047     		bx	lr
+ 228              	.L26:
+ARM GAS  /tmp/cciVROCd.s 			page 9
+
+
+ 229              		.align	2
+ 230              	.L25:
+ 231 0054 00000000 		.word	maf_simple_average_kern
+ 232              		.cfi_endproc
+ 233              	.LFE0:
+ 235              		.section	.text.create_maf,"ax",%progbits
+ 236              		.align	1
+ 237              		.global	create_maf
+ 238              		.syntax unified
+ 239              		.thumb
+ 240              		.thumb_func
+ 241              		.fpu softvfp
+ 243              	create_maf:
+ 244              	.LFB1:
+  80:signals/c/moving-average/moving_average.c ****     maf_t *instance = (maf_t*)malloc(sizeof(maf_t));
+ 245              		.loc 1 80 0
+ 246              		.cfi_startproc
+ 247              		@ args = 0, pretend = 0, frame = 0
+ 248              		@ frame_needed = 0, uses_anonymous_args = 0
+ 249              	.LVL24:
+ 250 0000 70B5     		push	{r4, r5, r6, lr}
+ 251              	.LCFI5:
+ 252              		.cfi_def_cfa_offset 16
+ 253              		.cfi_offset 4, -16
+ 254              		.cfi_offset 5, -12
+ 255              		.cfi_offset 6, -8
+ 256              		.cfi_offset 14, -4
+ 257 0002 0546     		mov	r5, r0
+  81:signals/c/moving-average/moving_average.c ****     
+ 258              		.loc 1 81 0
+ 259 0004 1C20     		movs	r0, #28
+ 260              	.LVL25:
+ 261 0006 FFF7FEFF 		bl	malloc
+ 262              	.LVL26:
+  83:signals/c/moving-average/moving_average.c **** 
+ 263              		.loc 1 83 0
+ 264 000a 0446     		mov	r4, r0
+ 265 000c C0B1     		cbz	r0, .L27
+  86:signals/c/moving-average/moving_average.c **** 
+ 266              		.loc 1 86 0
+ 267 000e 0223     		movs	r3, #2
+ 268 0010 0370     		strb	r3, [r0]
+  89:signals/c/moving-average/moving_average.c ****     instance->buffer0 = (float*)malloc(sizeof(float)*length);
+ 269              		.loc 1 89 0
+ 270 0012 C560     		str	r5, [r0, #12]
+  90:signals/c/moving-average/moving_average.c ****     
+ 271              		.loc 1 90 0
+ 272 0014 9D40     		lsls	r5, r5, r3
+ 273              	.LVL27:
+ 274 0016 2846     		mov	r0, r5
+ 275              	.LVL28:
+ 276 0018 FFF7FEFF 		bl	malloc
+ 277              	.LVL29:
+ 278 001c 0646     		mov	r6, r0
+ 279 001e 6060     		str	r0, [r4, #4]
+  92:signals/c/moving-average/moving_average.c ****     {
+ 280              		.loc 1 92 0
+ARM GAS  /tmp/cciVROCd.s 			page 10
+
+
+ 281 0020 80B1     		cbz	r0, .L32
+  98:signals/c/moving-average/moving_average.c **** 
+ 282              		.loc 1 98 0
+ 283 0022 2846     		mov	r0, r5
+ 284 0024 FFF7FEFF 		bl	malloc
+ 285              	.LVL30:
+ 286 0028 A060     		str	r0, [r4, #8]
+ 100:signals/c/moving-average/moving_average.c ****     {
+ 287              		.loc 1 100 0
+ 288 002a 80B1     		cbz	r0, .L33
+ 107:signals/c/moving-average/moving_average.c **** 
+ 289              		.loc 1 107 0
+ 290 002c 0023     		movs	r3, #0
+ 291 002e 6370     		strb	r3, [r4, #1]
+ 110:signals/c/moving-average/moving_average.c **** 
+ 292              		.loc 1 110 0
+ 293 0030 0B4A     		ldr	r2, .L34
+ 294 0032 2261     		str	r2, [r4, #16]
+ 113:signals/c/moving-average/moving_average.c ****     instance->kern_params_length = 0;
+ 295              		.loc 1 113 0
+ 296 0034 6361     		str	r3, [r4, #20]
+ 114:signals/c/moving-average/moving_average.c **** 
+ 297              		.loc 1 114 0
+ 298 0036 A361     		str	r3, [r4, #24]
+ 116:signals/c/moving-average/moving_average.c **** 
+ 299              		.loc 1 116 0
+ 300 0038 0021     		movs	r1, #0
+ 301 003a 2046     		mov	r0, r4
+ 302 003c FFF7FEFF 		bl	maf_fill
+ 303              	.LVL31:
+ 304              	.L27:
+ 119:signals/c/moving-average/moving_average.c **** 
+ 305              		.loc 1 119 0
+ 306 0040 2046     		mov	r0, r4
+ 307 0042 70BD     		pop	{r4, r5, r6, pc}
+ 308              	.LVL32:
+ 309              	.L32:
+  94:signals/c/moving-average/moving_average.c ****         return NULL;
+ 310              		.loc 1 94 0
+ 311 0044 2046     		mov	r0, r4
+ 312 0046 FFF7FEFF 		bl	free
+ 313              	.LVL33:
+  95:signals/c/moving-average/moving_average.c ****     }
+ 314              		.loc 1 95 0
+ 315 004a 0024     		movs	r4, #0
+ 316              	.LVL34:
+ 317 004c F8E7     		b	.L27
+ 318              	.LVL35:
+ 319              	.L33:
+ 102:signals/c/moving-average/moving_average.c ****         free(instance);
+ 320              		.loc 1 102 0
+ 321 004e 3046     		mov	r0, r6
+ 322 0050 FFF7FEFF 		bl	free
+ 323              	.LVL36:
+ 103:signals/c/moving-average/moving_average.c ****         return NULL;
+ 324              		.loc 1 103 0
+ 325 0054 2046     		mov	r0, r4
+ARM GAS  /tmp/cciVROCd.s 			page 11
+
+
+ 326 0056 FFF7FEFF 		bl	free
+ 327              	.LVL37:
+ 104:signals/c/moving-average/moving_average.c ****     }
+ 328              		.loc 1 104 0
+ 329 005a 0024     		movs	r4, #0
+ 330              	.LVL38:
+ 331 005c F0E7     		b	.L27
+ 332              	.L35:
+ 333 005e 00BF     		.align	2
+ 334              	.L34:
+ 335 0060 00000000 		.word	maf_simple_average_kern
+ 336              		.cfi_endproc
+ 337              	.LFE1:
+ 339              		.global	__aeabi_fmul
+ 340              		.global	__aeabi_fadd
+ 341              		.section	.text.maf_filter,"ax",%progbits
+ 342              		.align	1
+ 343              		.global	maf_filter
+ 344              		.syntax unified
+ 345              		.thumb
+ 346              		.thumb_func
+ 347              		.fpu softvfp
+ 349              	maf_filter:
+ 350              	.LFB3:
+ 137:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return 0;
+ 351              		.loc 1 137 0
+ 352              		.cfi_startproc
+ 353              		@ args = 0, pretend = 0, frame = 0
+ 354              		@ frame_needed = 0, uses_anonymous_args = 0
+ 355              	.LVL39:
+ 356 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 357              	.LCFI6:
+ 358              		.cfi_def_cfa_offset 24
+ 359              		.cfi_offset 4, -24
+ 360              		.cfi_offset 5, -20
+ 361              		.cfi_offset 6, -16
+ 362              		.cfi_offset 7, -12
+ 363              		.cfi_offset 8, -8
+ 364              		.cfi_offset 14, -4
+ 138:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return 0;
+ 365              		.loc 1 138 0
+ 366 0004 0028     		cmp	r0, #0
+ 367 0006 41D0     		beq	.L46
+ 368 0008 0546     		mov	r5, r0
+ 139:signals/c/moving-average/moving_average.c **** 
+ 369              		.loc 1 139 0
+ 370 000a 0278     		ldrb	r2, [r0]	@ zero_extendqisi2
+ 371 000c 002A     		cmp	r2, #0
+ 372 000e 3FD0     		beq	.L47
+ 143:signals/c/moving-average/moving_average.c ****     {
+ 373              		.loc 1 143 0
+ 374 0010 4278     		ldrb	r2, [r0, #1]	@ zero_extendqisi2
+ 375 0012 A2B9     		cbnz	r2, .L38
+ 146:signals/c/moving-average/moving_average.c ****         buffer = instance->buffer1;
+ 376              		.loc 1 146 0
+ 377 0014 0122     		movs	r2, #1
+ 378 0016 4270     		strb	r2, [r0, #1]
+ARM GAS  /tmp/cciVROCd.s 			page 12
+
+
+ 147:signals/c/moving-average/moving_average.c **** 
+ 379              		.loc 1 147 0
+ 380 0018 8768     		ldr	r7, [r0, #8]
+ 381              	.LVL40:
+ 382              	.LBB4:
+ 150:signals/c/moving-average/moving_average.c ****         {
+ 383              		.loc 1 150 0
+ 384 001a 0020     		movs	r0, #0
+ 385              	.LVL41:
+ 386 001c 07E0     		b	.L39
+ 387              	.LVL42:
+ 388              	.L40:
+ 152:signals/c/moving-average/moving_average.c ****         }
+ 389              		.loc 1 152 0 discriminator 3
+ 390 001e AC68     		ldr	r4, [r5, #8]
+ 391 0020 421C     		adds	r2, r0, #1
+ 392 0022 6B68     		ldr	r3, [r5, #4]
+ 393 0024 53F82000 		ldr	r0, [r3, r0, lsl #2]	@ float
+ 394              	.LVL43:
+ 395 0028 44F82200 		str	r0, [r4, r2, lsl #2]	@ float
+ 396              	.LVL44:
+ 150:signals/c/moving-average/moving_average.c ****         {
+ 397              		.loc 1 150 0 discriminator 3
+ 398 002c 1046     		mov	r0, r2
+ 399              	.LVL45:
+ 400              	.L39:
+ 150:signals/c/moving-average/moving_average.c ****         {
+ 401              		.loc 1 150 0 is_stmt 0 discriminator 1
+ 402 002e EA68     		ldr	r2, [r5, #12]
+ 403 0030 013A     		subs	r2, r2, #1
+ 404 0032 9042     		cmp	r0, r2
+ 405 0034 F3D3     		bcc	.L40
+ 406              	.LVL46:
+ 407              	.L41:
+ 408              	.LBE4:
+ 170:signals/c/moving-average/moving_average.c ****     for(size_t i = 0; i < instance->buffer_length; i++)
+ 409              		.loc 1 170 0 is_stmt 1
+ 410 0036 3960     		str	r1, [r7]	@ float
+ 411              	.LVL47:
+ 412              	.LBB5:
+ 171:signals/c/moving-average/moving_average.c ****     {
+ 413              		.loc 1 171 0
+ 414 0038 0024     		movs	r4, #0
+ 415              	.LBE5:
+ 169:signals/c/moving-average/moving_average.c ****     buffer[0] = input;
+ 416              		.loc 1 169 0
+ 417 003a 0026     		movs	r6, #0
+ 418              	.LBB6:
+ 171:signals/c/moving-average/moving_average.c ****     {
+ 419              		.loc 1 171 0
+ 420 003c 20E0     		b	.L44
+ 421              	.LVL48:
+ 422              	.L38:
+ 423              	.LBE6:
+ 158:signals/c/moving-average/moving_average.c ****         buffer = instance->buffer0;
+ 424              		.loc 1 158 0
+ 425 003e 0022     		movs	r2, #0
+ARM GAS  /tmp/cciVROCd.s 			page 13
+
+
+ 426 0040 4270     		strb	r2, [r0, #1]
+ 159:signals/c/moving-average/moving_average.c **** 
+ 427              		.loc 1 159 0
+ 428 0042 4768     		ldr	r7, [r0, #4]
+ 429              	.LVL49:
+ 430              	.LBB7:
+ 162:signals/c/moving-average/moving_average.c ****         {
+ 431              		.loc 1 162 0
+ 432 0044 07E0     		b	.L42
+ 433              	.LVL50:
+ 434              	.L43:
+ 164:signals/c/moving-average/moving_average.c ****         }
+ 435              		.loc 1 164 0 discriminator 3
+ 436 0046 6C68     		ldr	r4, [r5, #4]
+ 437 0048 501C     		adds	r0, r2, #1
+ 438 004a AB68     		ldr	r3, [r5, #8]
+ 439 004c 53F82220 		ldr	r2, [r3, r2, lsl #2]	@ float
+ 440              	.LVL51:
+ 441 0050 44F82020 		str	r2, [r4, r0, lsl #2]	@ float
+ 442              	.LVL52:
+ 162:signals/c/moving-average/moving_average.c ****         {
+ 443              		.loc 1 162 0 discriminator 3
+ 444 0054 0246     		mov	r2, r0
+ 445              	.LVL53:
+ 446              	.L42:
+ 162:signals/c/moving-average/moving_average.c ****         {
+ 447              		.loc 1 162 0 is_stmt 0 discriminator 1
+ 448 0056 E868     		ldr	r0, [r5, #12]
+ 449 0058 0138     		subs	r0, r0, #1
+ 450 005a 8242     		cmp	r2, r0
+ 451 005c F3D3     		bcc	.L43
+ 452 005e EAE7     		b	.L41
+ 453              	.LVL54:
+ 454              	.L45:
+ 455              	.LBE7:
+ 456              	.LBB8:
+ 173:signals/c/moving-average/moving_average.c ****     }
+ 457              		.loc 1 173 0 is_stmt 1 discriminator 3
+ 458 0060 57F82480 		ldr	r8, [r7, r4, lsl #2]	@ float
+ 459 0064 2B69     		ldr	r3, [r5, #16]
+ 460 0066 2146     		mov	r1, r4
+ 461 0068 2846     		mov	r0, r5
+ 462 006a 9847     		blx	r3
+ 463              	.LVL55:
+ 464 006c 0146     		mov	r1, r0
+ 465 006e 4046     		mov	r0, r8
+ 466 0070 FFF7FEFF 		bl	__aeabi_fmul
+ 467              	.LVL56:
+ 468 0074 0146     		mov	r1, r0
+ 469 0076 3046     		mov	r0, r6
+ 470 0078 FFF7FEFF 		bl	__aeabi_fadd
+ 471              	.LVL57:
+ 472 007c 0646     		mov	r6, r0
+ 473              	.LVL58:
+ 171:signals/c/moving-average/moving_average.c ****     {
+ 474              		.loc 1 171 0 discriminator 3
+ 475 007e 0134     		adds	r4, r4, #1
+ARM GAS  /tmp/cciVROCd.s 			page 14
+
+
+ 476              	.LVL59:
+ 477              	.L44:
+ 171:signals/c/moving-average/moving_average.c ****     {
+ 478              		.loc 1 171 0 is_stmt 0 discriminator 1
+ 479 0080 EB68     		ldr	r3, [r5, #12]
+ 480 0082 9C42     		cmp	r4, r3
+ 481 0084 ECD3     		bcc	.L45
+ 482              	.LVL60:
+ 483              	.L36:
+ 484              	.LBE8:
+ 177:signals/c/moving-average/moving_average.c **** 
+ 485              		.loc 1 177 0 is_stmt 1
+ 486 0086 3046     		mov	r0, r6
+ 487 0088 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 488              	.LVL61:
+ 489              	.L46:
+ 138:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return 0;
+ 490              		.loc 1 138 0
+ 491 008c 0026     		movs	r6, #0
+ 492 008e FAE7     		b	.L36
+ 493              	.L47:
+ 139:signals/c/moving-average/moving_average.c **** 
+ 494              		.loc 1 139 0
+ 495 0090 0026     		movs	r6, #0
+ 496 0092 F8E7     		b	.L36
+ 497              		.cfi_endproc
+ 498              	.LFE3:
+ 500              		.section	.text.delete_maf,"ax",%progbits
+ 501              		.align	1
+ 502              		.global	delete_maf
+ 503              		.syntax unified
+ 504              		.thumb
+ 505              		.thumb_func
+ 506              		.fpu softvfp
+ 508              	delete_maf:
+ 509              	.LFB4:
+ 180:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 510              		.loc 1 180 0
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 0
+ 513              		@ frame_needed = 0, uses_anonymous_args = 0
+ 514              	.LVL62:
+ 181:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return RETURN_ERROR;
+ 515              		.loc 1 181 0
+ 516 0000 C8B1     		cbz	r0, .L54
+ 180:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 517              		.loc 1 180 0
+ 518 0002 10B5     		push	{r4, lr}
+ 519              	.LCFI7:
+ 520              		.cfi_def_cfa_offset 8
+ 521              		.cfi_offset 4, -8
+ 522              		.cfi_offset 14, -4
+ 523 0004 0446     		mov	r4, r0
+ 182:signals/c/moving-average/moving_average.c **** 
+ 524              		.loc 1 182 0
+ 525 0006 0278     		ldrb	r2, [r0]	@ zero_extendqisi2
+ 526 0008 0AB9     		cbnz	r2, .L58
+ARM GAS  /tmp/cciVROCd.s 			page 15
+
+
+ 527 000a 0020     		movs	r0, #0
+ 528              	.LVL63:
+ 193:signals/c/moving-average/moving_average.c **** 
+ 529              		.loc 1 193 0
+ 530 000c 10BD     		pop	{r4, pc}
+ 531              	.LVL64:
+ 532              	.L58:
+ 184:signals/c/moving-average/moving_average.c ****     free(instance->buffer0);
+ 533              		.loc 1 184 0
+ 534 000e 0023     		movs	r3, #0
+ 535 0010 0370     		strb	r3, [r0]
+ 185:signals/c/moving-average/moving_average.c ****     free(instance->buffer1);
+ 536              		.loc 1 185 0
+ 537 0012 4068     		ldr	r0, [r0, #4]
+ 538              	.LVL65:
+ 539 0014 FFF7FEFF 		bl	free
+ 540              	.LVL66:
+ 186:signals/c/moving-average/moving_average.c ****     if(instance->kern_params != NULL) free(instance->kern_params);
+ 541              		.loc 1 186 0
+ 542 0018 A068     		ldr	r0, [r4, #8]
+ 543 001a FFF7FEFF 		bl	free
+ 544              	.LVL67:
+ 187:signals/c/moving-average/moving_average.c **** 
+ 545              		.loc 1 187 0
+ 546 001e 6069     		ldr	r0, [r4, #20]
+ 547 0020 08B1     		cbz	r0, .L51
+ 187:signals/c/moving-average/moving_average.c **** 
+ 548              		.loc 1 187 0 is_stmt 0 discriminator 1
+ 549 0022 FFF7FEFF 		bl	free
+ 550              	.LVL68:
+ 551              	.L51:
+ 189:signals/c/moving-average/moving_average.c ****     {
+ 552              		.loc 1 189 0 is_stmt 1
+ 553 0026 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 554 0028 022B     		cmp	r3, #2
+ 555 002a 00D0     		beq	.L59
+ 556              	.L52:
+ 193:signals/c/moving-average/moving_average.c **** 
+ 557              		.loc 1 193 0
+ 558 002c 10BD     		pop	{r4, pc}
+ 559              	.LVL69:
+ 560              	.L59:
+ 191:signals/c/moving-average/moving_average.c ****     }
+ 561              		.loc 1 191 0
+ 562 002e 2046     		mov	r0, r4
+ 563 0030 FFF7FEFF 		bl	free
+ 564              	.LVL70:
+ 565 0034 FAE7     		b	.L52
+ 566              	.LVL71:
+ 567              	.L54:
+ 568              	.LCFI8:
+ 569              		.cfi_def_cfa_offset 0
+ 570              		.cfi_restore 4
+ 571              		.cfi_restore 14
+ 572 0036 0020     		movs	r0, #0
+ 573              	.LVL72:
+ 574 0038 7047     		bx	lr
+ARM GAS  /tmp/cciVROCd.s 			page 16
+
+
+ 575              		.cfi_endproc
+ 576              	.LFE4:
+ 578              		.section	.text.maf_set_simple_average,"ax",%progbits
+ 579              		.align	1
+ 580              		.global	maf_set_simple_average
+ 581              		.syntax unified
+ 582              		.thumb
+ 583              		.thumb_func
+ 584              		.fpu softvfp
+ 586              	maf_set_simple_average:
+ 587              	.LFB6:
+ 199:signals/c/moving-average/moving_average.c **** 
+ 200:signals/c/moving-average/moving_average.c **** uint8_t maf_set_simple_average(maf_t *instance)
+ 201:signals/c/moving-average/moving_average.c **** {
+ 588              		.loc 1 201 0
+ 589              		.cfi_startproc
+ 590              		@ args = 0, pretend = 0, frame = 0
+ 591              		@ frame_needed = 0, uses_anonymous_args = 0
+ 592              	.LVL73:
+ 202:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 593              		.loc 1 202 0
+ 594 0000 70B1     		cbz	r0, .L62
+ 201:signals/c/moving-average/moving_average.c ****     if(instance == NULL) return RETURN_ERROR;
+ 595              		.loc 1 201 0
+ 596 0002 10B5     		push	{r4, lr}
+ 597              	.LCFI9:
+ 598              		.cfi_def_cfa_offset 8
+ 599              		.cfi_offset 4, -8
+ 600              		.cfi_offset 14, -4
+ 601 0004 0446     		mov	r4, r0
+ 203:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return RETURN_ERROR;
+ 602              		.loc 1 203 0
+ 603 0006 0078     		ldrb	r0, [r0]	@ zero_extendqisi2
+ 604              	.LVL74:
+ 605 0008 68B1     		cbz	r0, .L61
+ 204:signals/c/moving-average/moving_average.c ****     
+ 205:signals/c/moving-average/moving_average.c ****     instance->kern_function = maf_simple_average_kern;
+ 606              		.loc 1 205 0
+ 607 000a 074A     		ldr	r2, .L68
+ 608 000c 2261     		str	r2, [r4, #16]
+ 206:signals/c/moving-average/moving_average.c ****     
+ 207:signals/c/moving-average/moving_average.c ****     if(instance->kern_params != NULL)
+ 609              		.loc 1 207 0
+ 610 000e 6069     		ldr	r0, [r4, #20]
+ 611 0010 40B1     		cbz	r0, .L63
+ 208:signals/c/moving-average/moving_average.c ****     { 
+ 209:signals/c/moving-average/moving_average.c ****         free(instance->kern_params);
+ 612              		.loc 1 209 0
+ 613 0012 FFF7FEFF 		bl	free
+ 614              	.LVL75:
+ 210:signals/c/moving-average/moving_average.c ****         instance->kern_params = NULL;
+ 615              		.loc 1 210 0
+ 616 0016 0023     		movs	r3, #0
+ 617 0018 6361     		str	r3, [r4, #20]
+ 211:signals/c/moving-average/moving_average.c ****         instance->kern_params_length = 0;
+ 618              		.loc 1 211 0
+ 619 001a A361     		str	r3, [r4, #24]
+ARM GAS  /tmp/cciVROCd.s 			page 17
+
+
+ 212:signals/c/moving-average/moving_average.c ****     }
+ 213:signals/c/moving-average/moving_average.c **** 
+ 214:signals/c/moving-average/moving_average.c ****     return RETURN_SUCCESS;
+ 620              		.loc 1 214 0
+ 621 001c 0120     		movs	r0, #1
+ 622 001e 10BD     		pop	{r4, pc}
+ 623              	.LVL76:
+ 624              	.L62:
+ 625              	.LCFI10:
+ 626              		.cfi_def_cfa_offset 0
+ 627              		.cfi_restore 4
+ 628              		.cfi_restore 14
+ 202:signals/c/moving-average/moving_average.c ****     if(instance->instance_mode == MAF_INSTANCE_NONE) return RETURN_ERROR;
+ 629              		.loc 1 202 0
+ 630 0020 0020     		movs	r0, #0
+ 631              	.LVL77:
+ 632 0022 7047     		bx	lr
+ 633              	.LVL78:
+ 634              	.L63:
+ 635              	.LCFI11:
+ 636              		.cfi_def_cfa_offset 8
+ 637              		.cfi_offset 4, -8
+ 638              		.cfi_offset 14, -4
+ 639              		.loc 1 214 0
+ 640 0024 0120     		movs	r0, #1
+ 641              	.L61:
+ 215:signals/c/moving-average/moving_average.c **** }...
+ 642              		.loc 1 215 0
+ 643 0026 10BD     		pop	{r4, pc}
+ 644              	.LVL79:
+ 645              	.L69:
+ 646              		.align	2
+ 647              	.L68:
+ 648 0028 00000000 		.word	maf_simple_average_kern
+ 649              		.cfi_endproc
+ 650              	.LFE6:
+ 652              		.text
+ 653              	.Letext0:
+ 654              		.file 2 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 655              		.file 3 "/usr/include/newlib/machine/_default_types.h"
+ 656              		.file 4 "/usr/include/newlib/sys/lock.h"
+ 657              		.file 5 "/usr/include/newlib/sys/_types.h"
+ 658              		.file 6 "/usr/include/newlib/sys/reent.h"
+ 659              		.file 7 "/usr/include/newlib/stdlib.h"
+ 660              		.file 8 "/usr/include/newlib/sys/_stdint.h"
+ 661              		.file 9 "signals/c/moving-average/moving_average.h"
+ARM GAS  /tmp/cciVROCd.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 moving_average.c
+     /tmp/cciVROCd.s:18     .text.maf_simple_average_kern:0000000000000000 $t
+     /tmp/cciVROCd.s:25     .text.maf_simple_average_kern:0000000000000000 maf_simple_average_kern
+     /tmp/cciVROCd.s:53     .text.maf_fill:0000000000000000 $t
+     /tmp/cciVROCd.s:60     .text.maf_fill:0000000000000000 maf_fill
+     /tmp/cciVROCd.s:132    .text.init_maf:0000000000000000 $t
+     /tmp/cciVROCd.s:139    .text.init_maf:0000000000000000 init_maf
+     /tmp/cciVROCd.s:231    .text.init_maf:0000000000000054 $d
+     /tmp/cciVROCd.s:236    .text.create_maf:0000000000000000 $t
+     /tmp/cciVROCd.s:243    .text.create_maf:0000000000000000 create_maf
+     /tmp/cciVROCd.s:335    .text.create_maf:0000000000000060 $d
+     /tmp/cciVROCd.s:342    .text.maf_filter:0000000000000000 $t
+     /tmp/cciVROCd.s:349    .text.maf_filter:0000000000000000 maf_filter
+     /tmp/cciVROCd.s:501    .text.delete_maf:0000000000000000 $t
+     /tmp/cciVROCd.s:508    .text.delete_maf:0000000000000000 delete_maf
+     /tmp/cciVROCd.s:579    .text.maf_set_simple_average:0000000000000000 $t
+     /tmp/cciVROCd.s:586    .text.maf_set_simple_average:0000000000000000 maf_set_simple_average
+     /tmp/cciVROCd.s:648    .text.maf_set_simple_average:0000000000000028 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_ui2f
+__aeabi_fdiv
+malloc
+free
+__aeabi_fmul
+__aeabi_fadd
