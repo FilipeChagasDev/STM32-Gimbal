@@ -1,9 +1,9 @@
 $fn = 128;
 
 cylinder_height = 14;
-cylinder_diameter = 27;
+cylinder_diameter = 27-1;
 
-rec1_x_len = 25;
+rec1_x_len = 25+29;
 rec1_y_len = cylinder_diameter;
 rec1_thickness = 4;
 

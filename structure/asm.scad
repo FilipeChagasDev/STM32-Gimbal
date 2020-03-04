@@ -11,15 +11,15 @@ color(structure_color) import("stl/pitch_holder.stl");
 
 //servo
 color(servo_color)
-    translate([-36.8,-6.2,35])
+    translate([-36.8-29,-6.2+0.5,35])
         rotate(a=90, v=[0,1,0])
             rotate(a=90, v=[1,0,0])
                 rotate(a=180, v=[0,1,0])
                     import("servo/mg90s.stl");
 
 
-
 /* -- PITCH AXIS -- */
+translate([-29,0,0])
 translate([-6,0,57])
 rotate(a=pitch_rotation, v=[1,0,0])
 {
