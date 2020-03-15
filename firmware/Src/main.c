@@ -74,6 +74,9 @@ size_t smoothing;
 servo_t servo_roll;
 servo_t servo_pitch;
 
+#define SERVO_ROLL_CHANNEL TIM_CHANNEL_1
+#define SERVO_PITCH_CHANNEL TIM_CHANNEL_2
+
 maf_t roll_filter;
 maf_t pitch_filter;
 
@@ -140,7 +143,7 @@ void init_servomotors()
     if(r != SERVO_STATUS_OK) error_alert("Cannot init servo_pitch");
 
     servo_set_offset(&servo_roll, 90);
-    servo_set_offset(&servo_pitch, 90);
+    servo_set_offset(&servo_pitch, 60);
 }
 
 void init_servomotors_motion()
@@ -227,7 +230,7 @@ void update_position_sensor()
     }
 
     sensor_calc_position(&sensor_pitch, &sensor_roll);
-    roll_compensation = -maf_filter(&roll_filter, sensor_roll);
+    roll_compensation = maf_filter(&roll_filter, sensor_roll);
     pitch_compensation = -maf_filter(&pitch_filter, sensor_pitch);
 
     HAL_GPIO_WritePin(UPDATE_LED_GPIO_Port, UPDATE_LED_Pin, GPIO_PIN_RESET);
@@ -526,10 +529,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   init_system();
-  
+
   /* USER CODE END 2 */
- 
- 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
