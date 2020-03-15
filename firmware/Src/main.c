@@ -46,6 +46,11 @@
 #define DEFAULT_FACTOR 1.4
 #define ROUND_ANGLE_PACK
 
+#define ROLL_COMPENSATION_FACTOR 1
+#define PITCH_COMPENSATION_FACTOR -1
+#define ROLL_SERVO_OFFSET 90
+#define PITCH_SERVO_OFFSET 60
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -64,7 +69,6 @@ TIM_HandleTypeDef htim4;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
 SD_MPU6050 position_sensor;
 
 float sensor_roll, sensor_pitch, sensor_factor;
@@ -79,7 +83,6 @@ servo_t servo_pitch;
 
 maf_t roll_filter;
 maf_t pitch_filter;
-
 
 /* USER CODE END PV */
 
@@ -110,7 +113,6 @@ void init_system()
     init_servomotors();
     init_uart_messaging();
     init_servomotors_motion();
-    init_mailbox();
 }
 
 void error_alert(char *msg)
@@ -119,7 +121,7 @@ void error_alert(char *msg)
     HAL_NVIC_DisableIRQ(TIM2_IRQn);
     HAL_NVIC_DisableIRQ(TIM3_IRQn);
 
-    HAL_GPIO_WritePin(ERROR_LED_GPIO_Port, ERROR_LED_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ERROR_LED_GPIO_Port, ERROR_LED_Pin, GPIO_PIN_SET); //blink error led
     
     sprintf(str, "{\"type\":\"error\",\"text\":\"%s\"}\n\r", msg);
     HAL_UART_Transmit(&huart1, str, strlen(str), 100);
@@ -128,7 +130,7 @@ void error_alert(char *msg)
 
     HAL_GPIO_WritePin(ERROR_LED_GPIO_Port, ERROR_LED_Pin, GPIO_PIN_RESET);
     
-    HAL_NVIC_SystemReset();
+    HAL_NVIC_SystemReset(); //reset microcontroller
 }
 
 /* -- Servomotors -- */
@@ -142,8 +144,8 @@ void init_servomotors()
     r = servo_init(&servo_pitch, &htim3, TIM_CHANNEL_2);
     if(r != SERVO_STATUS_OK) error_alert("Cannot init servo_pitch");
 
-    servo_set_offset(&servo_roll, 90);
-    servo_set_offset(&servo_pitch, 60);
+    servo_set_offset(&servo_roll, ROLL_SERVO_OFFSET);
+    servo_set_offset(&servo_pitch, PITCH_SERVO_OFFSET);
 }
 
 void init_servomotors_motion()
@@ -230,8 +232,8 @@ void update_position_sensor()
     }
 
     sensor_calc_position(&sensor_pitch, &sensor_roll);
-    roll_compensation = maf_filter(&roll_filter, sensor_roll);
-    pitch_compensation = -maf_filter(&pitch_filter, sensor_pitch);
+    roll_compensation = ROLL_COMPENSATION_FACTOR * maf_filter(&roll_filter, sensor_roll);
+    pitch_compensation = PITCH_COMPENSATION_FACTOR * maf_filter(&pitch_filter, sensor_pitch);
 
     HAL_GPIO_WritePin(UPDATE_LED_GPIO_Port, UPDATE_LED_Pin, GPIO_PIN_RESET);
 }
@@ -247,7 +249,6 @@ void sensor_calc_position(float *pitch, float *roll)
 }
 
 /* --- Smoothing -- */
-
 
 /**
  * @brief Reset MAF with a new buffer length
@@ -274,7 +275,6 @@ void change_smoothing(size_t value)
 
 /* -- UART messaging -- */
 
-
 /**
  * @brief Send position & compensation infos to TTL
  */
@@ -283,7 +283,6 @@ void uart_message_update()
     send_angle_pack(SENSOR_ANGLE_PACK, sensor_pitch, sensor_roll);
     send_angle_pack(SERVO_ANGLE_PACK, pitch_compensation, roll_compensation);
 }
-
 
 /**
  * @brief Initialize messaging timer interruptions
@@ -360,135 +359,6 @@ void send_message_pack(char *msg)
     HAL_UART_Transmit(&huart1, message_pack_str, strlen(message_pack_str), 100);
 }
 
-/* --- Mailbox --- */
-
-char mailbox_buffer[50];
-
-void init_mailbox()
-{
-}
-
-/**
- * @brief UART RX IRQ callback
- */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  for(int i = 0; i < 50; i++)
-  {
-      if(mailbox_buffer[i] == '\n')
-      { 
-          mailbox_buffer[i] = '\0';
-          //send_echo_pack(mailbox_buffer);
-          mailbox_message_received(mailbox_buffer);
-          return;
-      }
-  }
-
-  mailbox_buffer[49] = '\0';
-  mailbox_message_received(mailbox_buffer);
-}
-
-void mailbox_listen()
-{
-    HAL_UART_Receive_IT(&huart1, mailbox_buffer, 50);
-}
-
-void mailbox_message_received(char *message)
-{
-    if(strcmp(message, "pause") == 0)
-    {
-        HAL_NVIC_DisableIRQ(TIM3_IRQn);
-        HAL_NVIC_DisableIRQ(TIM4_IRQn);
-    }
-    else if(strcmp(message, "resume") == 0)
-    {
-        HAL_NVIC_EnableIRQ(TIM4_IRQn);
-        HAL_NVIC_EnableIRQ(TIM3_IRQn);
-    }
-    else
-    {
-        #if 0 /* problematic code */
-        char pack_type[100];
-        char pack_param[100];
-        int pack_value;
-        int pack_exp;
-
-        sscanf(message, "type %s param %s value %de%d", pack_type, pack_param, &pack_value, &pack_exp);
-        float float_value = 0;
-        float_value = (float)pack_value * pow(10, pack_exp);
-
-        //send_message_pack(pack_type);
-        //send_message_pack(pack_param);
-        //send_value_pack(SMOOTHING_VALUE_PACK, float_value);        
-        
-        if(strcmp(pack_type, "get") == 0)
-        {
-            if(strcmp(pack_param, "sensor") == 0)
-            {
-                send_angle_pack(SENSOR_ANGLE_PACK, sensor_pitch, sensor_roll);
-            }
-            else if(strcmp(pack_param, "servo") == 0)
-            {
-                send_angle_pack(SERVO_ANGLE_PACK, pitch_compensation, roll_compensation);
-            }
-            else if(strcmp(pack_param, "factor") == 0)
-            {
-                send_value_pack(FACTOR_VALUE_PACK, sensor_factor);
-            }
-            else if(strcmp(pack_param, "smoothing") == 0)
-            {
-                send_value_pack(SMOOTHING_VALUE_PACK, (float)smoothing);
-            }
-            else if(strcmp(pack_param, "offset") == 0)
-            {
-                send_angle_pack(OFFSET_ANGLE_PACK, servo_pitch.offset, servo_roll.offset);
-            }
-            else
-            {
-                send_message_pack("undefined param");
-            }
-        }
-        else if(strcmp(pack_type, "set") == 0)
-        {
-            if(strcmp(pack_param, "servo_pitch") == 0)
-            {
-                pitch_compensation = float_value;
-                servo_set_position(&servo_pitch, pitch_compensation);
-            }
-            else if(strcmp(pack_param, "servo_roll") == 0)
-            {
-                roll_compensation = float_value;
-                servo_set_position(&servo_roll, roll_compensation);
-            }
-            else if(strcmp(pack_param, "roll_offset") == 0)
-            {
-                servo_set_offset(&servo_roll, float_value);
-            }
-            else if(strcmp(pack_param, "pitch_offset") == 0)
-            {
-                servo_set_offset(&servo_pitch, float_value);
-            }
-            else if(strcmp(pack_param, "sensor_factor") == 0)
-            {
-                sensor_factor = float_value;
-            }
-            else if(strcmp(pack_param, "sensor_smoothing") == 0)
-            {
-                change_smoothing((int)float_value);
-            }
-            else
-            {
-                send_message_pack("undefined param");
-            }
-        }
-        else
-        {
-            send_message_pack("undefined pack type");
-        }
-        #endif
-    }
-}
-
 /* USER CODE END 0 */
 
 /**
@@ -536,9 +406,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    mailbox_listen();
     /* USER CODE END WHILE */
-
+    asm volatile ("WFI");
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

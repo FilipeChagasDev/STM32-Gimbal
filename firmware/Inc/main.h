@@ -89,10 +89,6 @@ void send_angle_pack(angle_pack_target_t target, float pitch, float roll);
 void send_echo_pack(char *msg);
 void send_message_pack(char *msg);
 
-// Mailbox
-void init_mailbox();
-void mailbox_message_received(char *message);
-
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
