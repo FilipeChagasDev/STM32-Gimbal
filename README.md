@@ -16,7 +16,7 @@ The course in which this work was presented has already ended. We were approved 
 * 2x Tower Pro MG90S servomotors
 * 1x MPU6050 3-axis gyroscope accelerometer
 
-![circ](circuit/diagram.ong)
+![circ](circuit/diagram.png)
 
 ## Firmware
 
@@ -37,7 +37,7 @@ The course in which this work was presented has already ended. We were approved 
 
 3D printed structure:
 
-![asm](imgs/asm3.ong)
+![asm](imgs/asm3.png)
 
 3D models made in **OpenSCAD**. The model of each piece is in the **'structures'** directory. Models are scaled to **one millimeter per unit**. It is necessary to use glue and nylon-cable-ties to fix some parts to the structure.
 
